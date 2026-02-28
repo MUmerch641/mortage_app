@@ -70,7 +70,6 @@ export const initializeIAP = async (): Promise<boolean> => {
             try {
                 await flushFailedPurchasesCachedAsPendingAndroid();
             } catch (flushError) {
-                console.log('Error flushing failed purchases (non-critical):', flushError);
             }
         }
 
@@ -137,20 +136,15 @@ const setupPurchaseListeners = () => {
                 try {
                     await finishTransaction({ purchase, isConsumable: false });
                 } catch (e) {
-                    console.log('Error finishing incomplete transaction:', e);
                 }
                 return;
             }
 
             // ── Guard: already handled in this JS session ──
             if (processedTransactionIds.has(transactionId)) {
-                console.log(
-                    `Transaction ${transactionId} already processed in this session. Finishing silently.`,
-                );
                 try {
                     await finishTransaction({ purchase, isConsumable: false });
                 } catch (e) {
-                    console.log('Error finishing duplicate transaction:', e);
                 }
                 return;
             }
@@ -161,13 +155,9 @@ const setupPurchaseListeners = () => {
             // ── Guard: already synced to Firestore (survives JS reloads) ──
             const alreadySynced = await isTransactionAlreadySynced(transactionId);
             if (alreadySynced) {
-                console.log(
-                    `Transaction ${transactionId} already in Firestore. Finishing silently.`,
-                );
                 try {
                     await finishTransaction({ purchase, isConsumable: false });
                 } catch (e) {
-                    console.log('Error finishing already-synced transaction:', e);
                 }
                 return;
             }
@@ -178,7 +168,6 @@ const setupPurchaseListeners = () => {
 
                 // ALWAYS finish the transaction after a successful DB write
                 await finishTransaction({ purchase, isConsumable: false });
-                console.log(`Transaction ${transactionId} finished successfully.`);
 
                 // Only show the alert if the user actively pressed "Subscribe" in
                 // this session. Stale replayed transactions are handled silently.
@@ -199,7 +188,6 @@ const setupPurchaseListeners = () => {
                 try {
                     await finishTransaction({ purchase, isConsumable: false });
                 } catch (finishErr) {
-                    console.log('Error finishing failed-processing transaction:', finishErr);
                 }
 
                 if (userInitiatedPurchase) {
@@ -354,7 +342,6 @@ export const restorePurchases = async (userId: string): Promise<boolean> => {
                         processedTransactionIds.add(p.transactionId);
                     }
                 } catch (e) {
-                    console.log('Error finishing restored transaction:', e);
                 }
             }
 
@@ -368,7 +355,6 @@ export const restorePurchases = async (userId: string): Promise<boolean> => {
             try {
                 await finishTransaction({ purchase: p as SubscriptionPurchase, isConsumable: false });
             } catch (e) {
-                console.log('Error finishing non-valid restored transaction:', e);
             }
         }
 
@@ -403,8 +389,6 @@ export const validateAndSyncPurchase = async (
         throw new Error('User not logged in');
     }
 
-    console.log(`Syncing purchase for user: ${uid}`);
-
     // Calculate subscription end date
     const purchaseDate = new Date(Number(purchase.transactionDate) || Date.now());
     const subscriptionEndDate = new Date(purchaseDate);
@@ -430,8 +414,6 @@ export const validateAndSyncPurchase = async (
                 iapPurchaseDate: purchaseDate.toISOString(),
                 iapReceipt: purchase.transactionReceipt || '',
             });
-
-        console.log('Firestore updated successfully');
     } catch (firestoreError) {
         console.error('Failed to update Firestore:', firestoreError);
         throw new Error('Failed to update user record');

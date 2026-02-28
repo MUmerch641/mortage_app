@@ -3,7 +3,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  mortageTableArray:[],
+  mortageTableArray: [],
 };
 
 const mortageTableSlice = createSlice({
@@ -11,7 +11,6 @@ const mortageTableSlice = createSlice({
   initialState,
   reducers: {
     mortageTableValue: (state, action) => {
-      console.log('Reducer action:', action); // Log action type and payload
       state.mortageTableArray = action.payload.mortageTableArray;
     },
   },

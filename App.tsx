@@ -54,11 +54,9 @@ async function tryRestoreFromPlayStore(userId?: string): Promise<boolean> {
   if (!userId) return false;
 
   try {
-    console.log('--- tryRestoreFromPlayStore: checking Google Play for active purchases...');
     const purchases = await getAvailablePurchases();
 
     if (!purchases || purchases.length === 0) {
-      console.log('--- tryRestoreFromPlayStore: no purchases found');
       return false;
     }
 
@@ -67,7 +65,6 @@ async function tryRestoreFromPlayStore(userId?: string): Promise<boolean> {
     );
 
     if (validSubscription) {
-      console.log('--- tryRestoreFromPlayStore: found active subscription, syncing...');
       await validateAndSyncPurchase(validSubscription as SubscriptionPurchase, userId);
 
       // Finish all restored purchases so the store stops replaying them
@@ -78,14 +75,11 @@ async function tryRestoreFromPlayStore(userId?: string): Promise<boolean> {
           console.log('Error finishing restored transaction:', e);
         }
       }
-      console.log('--- tryRestoreFromPlayStore: subscription restored successfully!');
       return true;
     }
 
-    console.log('--- tryRestoreFromPlayStore: no valid subscription SKU found');
     return false;
   } catch (error) {
-    console.error('--- tryRestoreFromPlayStore: error:', error);
     return false;
   }
 }
@@ -103,7 +97,6 @@ function StackNavigation() {
     setRequiresSubscription(false);
 
     const checkSubscription = async () => {
-      console.log('🔍 [StackNav] checkSubscription start — userToken:', !!userToken, '| uid:', userDetails?._user?.uid);
 
       // Signal to SegmentScreen (and any other screens) that we are mid-check
       store.dispatch(setCheckingSubscription(true));
@@ -118,43 +111,33 @@ function StackNavigation() {
             }), 10000) // 10 second max wait
           );
 
-          console.log('🔍 [StackNav] Querying Firestore for subscription status...');
           const status: any = await Promise.race([
             checkSubscriptionStatus(userDetails._user.uid),
             timeoutPromise,
           ]);
 
-          console.log('🔍 [StackNav] Firestore result:', JSON.stringify(status));
 
           if (!status.hasActiveSubscription && !status.isTrialActive) {
             // Firestore says not subscribed — verify with Google Play before blocking
-            console.log('🔍 [StackNav] Firestore says NOT subscribed. Checking Google Play...');
             const restored = await tryRestoreFromPlayStore(userDetails._user.uid);
-            console.log('🔍 [StackNav] Google Play restore result:', restored);
             setRequiresSubscription(!restored);
           } else {
-            console.log('🔍 [StackNav] Firestore confirms subscription is ACTIVE. Granting access.');
             setRequiresSubscription(false);
           }
         } else {
-          console.log('🔍 [StackNav] No userToken or uid — skipping subscription check.');
           setSubscriptionChecked(true);
           store.dispatch(setCheckingSubscription(false));
           return;
         }
       } catch (error) {
-        console.error('🔍 [StackNav] Subscription check ERROR:', error);
         // Try Google Play as a fallback before blocking the user
         try {
           const restored = await tryRestoreFromPlayStore(userDetails?._user?.uid);
-          console.log('🔍 [StackNav] Error fallback — Google Play restore result:', restored);
           setRequiresSubscription(!restored);
         } catch {
-          console.warn('🔍 [StackNav] Google Play fallback also failed. Requiring subscription.');
           setRequiresSubscription(true);
         }
       } finally {
-        console.log('🔍 [StackNav] checkSubscription complete.');
         setSubscriptionChecked(true);
         store.dispatch(setCheckingSubscription(false));
       }
@@ -214,18 +197,14 @@ function MainDrawerNavigator() {
   // Initialize IAP ONCE on mount — never re-init when userDetails changes.
   // initializeIAP is internally guarded against duplicate calls.
   useEffect(() => {
-    console.log('--- APP MOUNTED: INIT IAP ---');
     initializeIAP()
       .then(result => {
-        console.log('--- APP: IAP init result:', result);
       })
       .catch(err => {
-        console.error('--- APP: IAP init error:', err);
       });
 
     // Cleanup on unmount only
     return () => {
-      console.log('--- APP: Cleaning up IAP connection ---');
       endIAPConnection();
     };
   }, []); // ← empty deps: runs once
@@ -233,7 +212,6 @@ function MainDrawerNavigator() {
   // Check premium access whenever the logged-in user changes
   useEffect(() => {
     if (userDetails?._user?.uid) {
-      console.log('--- APP: Checking premium access for user:', userDetails._user.uid);
       checkPremiumAccess(userDetails._user.uid);
     }
   }, [userDetails?._user?.uid]);

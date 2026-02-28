@@ -1,5 +1,5 @@
-import {Picker} from '@react-native-picker/picker';
-import React, {useState, useRef, useEffect} from 'react';
+import { Picker } from '@react-native-picker/picker';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,10 +14,10 @@ import {
   Keyboard,
 } from 'react-native';
 import Box from '../components/Box';
-import {useDispatch, useSelector} from 'react-redux';
-import {layout3Form} from '../redux/slices/layout3Slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { layout3Form } from '../redux/slices/layout3Slice';
 import Footer from '../components/Footer';
-import {MainScreenProps} from '../utils/types';
+import { MainScreenProps } from '../utils/types';
 
 const LayoutScreen3: React.FC<MainScreenProps> = ({
   navigateToTab,
@@ -48,13 +48,13 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
   const fields = [
-    {field: 'fixedInterestRate', label: 'Fixed interest rate'},
-    {field: 'numOfFixedYear', label: 'Number of fixed years'},
-    {field: 'variableInterestRate', label: 'Variable interest rate'},
-    {field: 'IBOR', label: 'IBOR (Interbank Offered Rate)'},
-    {field: 'lifeInsuranceRate', label: 'Life insurance rate (Annual)'},
-    {field: 'propertyInsuranceRate', label: 'Property insurance rate (Annual)'},
-    {field: 'numberOfLiables', label: 'Number of liable applicants'},
+    { field: 'fixedInterestRate', label: 'Fixed interest rate' },
+    { field: 'numOfFixedYear', label: 'Number of fixed years' },
+    { field: 'variableInterestRate', label: 'Variable interest rate' },
+    { field: 'IBOR', label: 'IBOR (Interbank Offered Rate)' },
+    { field: 'lifeInsuranceRate', label: 'Life insurance rate (Annual)' },
+    { field: 'propertyInsuranceRate', label: 'Property insurance rate (Annual)' },
+    { field: 'numberOfLiables', label: 'Number of liable applicants' },
   ];
 
   // Add keyboard listeners
@@ -85,7 +85,7 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
       // Initialize base rate with the original value (divide by number of liables if it exists)
       const initialBaseRate = allValuesFromLayout3.numberOfLiables
         ? allValuesFromLayout3.lifeInsuranceRate /
-          allValuesFromLayout3.numberOfLiables
+        allValuesFromLayout3.numberOfLiables
         : allValuesFromLayout3.lifeInsuranceRate || 0;
       setBaseLifeInsuranceRate(initialBaseRate);
     }
@@ -134,7 +134,6 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
     let updatedForm;
 
     if (field === 'numberOfLiables') {
-      console.log('Life Insurance Rate:', form.lifeInsuranceRate);
       const calculatedRate =
         numericValue > 0
           ? baseLifeInsuranceRate * numericValue
@@ -158,7 +157,7 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
       };
     }
     setForm(updatedForm);
-    dispatch(layout3Form({...updatedForm}));
+    dispatch(layout3Form({ ...updatedForm }));
   };
 
   const handleFocus = (
@@ -248,7 +247,7 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
                 borderRadius: 10,
                 alignItems: 'center',
               }}>
-              <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
                 Rates
               </Text>
             </Box>
@@ -285,7 +284,7 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
                 onFocus={event =>
                   handleFocus(
                     event,
-                    {current: inputRefs.current[index + 1]},
+                    { current: inputRefs.current[index + 1] },
                     item.field,
                   )
                 }

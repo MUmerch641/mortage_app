@@ -98,8 +98,10 @@ const Subscription: React.FC<any> = ({ route }) => {
 
   // Auto-navigate back to the main app immediately if premium and NOT from drawer
   useEffect(() => {
-    const isDrawer = navigation.getState()?.type === 'drawer';
-    if (userSubscribed && !isVerifyingStatus && !isDrawer) {
+    const navState = navigation.getState();
+    const isMainStack = navState?.routes?.[0]?.name === 'SegmentScreen';
+
+    if (userSubscribed && !isVerifyingStatus && !isMainStack) {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,

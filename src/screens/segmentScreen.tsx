@@ -87,15 +87,6 @@ const SegmentScreen = () => {
   // Without this guard the modal appears over the login screen after logout.
   const isModalVisible = !!userToken && !isPremiumUser && !isCheckingSubscription;
 
-  console.log(
-    '🧩 [SegmentScreen] token:', !!userToken,
-    '| isPremiumUser:', isPremiumUser,
-    '| isCheckingSubscription:', isCheckingSubscription,
-    '| isModalVisible:', isModalVisible,
-    '| subscription.isPremium:', subscriptionState?.isPremium,
-    '| user.isPremium:', userDetails?._user?.isPremium,
-  );
-
   const userId = userDetails?._user?.id || userDetails?._user?.uid;
 
   useEffect(() => {
@@ -167,9 +158,7 @@ const SegmentScreen = () => {
       const db = getFirestore();
       const userRef = doc(db, 'users', uid);
       await setDoc(userRef, userData);
-      console.log(`User document ${uid} created and data added!`);
     } catch (error: any) {
-      console.log('Error creating document:', error.message);
     }
   };
 
@@ -178,7 +167,6 @@ const SegmentScreen = () => {
     const uid = user.id; // Google user ID as the document ID
 
     if (!uid) {
-      console.log('No user ID available, skipping addUser');
       return;
     }
 
@@ -192,15 +180,12 @@ const SegmentScreen = () => {
 
     if (!userExists) {
       await createUserDocument(uid, userData);
-    } else {
-      console.log('User already exists in Firestore.');
     }
   };
 
   const checkIfUserExists = async (uid: string) => {
     try {
       if (!uid) {
-        console.log('No user ID provided to checkIfUserExists');
         return false;
       }
       const db = getFirestore();
@@ -208,7 +193,6 @@ const SegmentScreen = () => {
       const userSnap = await getDoc(userRef);
       return userSnap.exists;
     } catch (error: any) {
-      console.log('Error checking if user exists:', error.message);
       return false;
     }
   };
@@ -216,7 +200,6 @@ const SegmentScreen = () => {
   useEffect(() => {
     // Only initialize user if we have valid user details
     if (!userDetails?._user?.uid) {
-      console.log('No user details available, skipping user initialization');
       return;
     }
 

@@ -47,14 +47,10 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
   }, []);
 
   const fetchUserData = async (userId: string, userEmail?: string) => {
-    console.log('📦 [fetchUserData] START - userId:', userId, 'userEmail:', userEmail);
     try {
-      console.log('📦 [fetchUserData] Querying Firestore for user doc...');
       const userDoc = await firestore().collection('users').doc(userId).get();
-      console.log('📦 [fetchUserData] Firestore query complete. Doc exists?', userDoc.exists);
 
       if (!userDoc.exists) {
-        console.log('📦 [fetchUserData] User doc NOT found. Creating new user...');
         const newUser: UserModel = {
           uid: userId,
           email: userEmail || email, // Use passed email (from Google) or text input
@@ -62,19 +58,16 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
           isPremium: false, // Must complete IAP to get access
           isSubscribed: false,
         };
-        console.log('📦 [fetchUserData] New user object:', JSON.stringify(newUser));
 
         await firestore().collection('users').doc(userId).set(newUser);
-        console.log('📦 [fetchUserData] ✅ New user doc created successfully!');
 
         return newUser;
       }
 
       const existingData = userDoc.data() as UserModel;
-      console.log('📦 [fetchUserData] ✅ Existing user found:', JSON.stringify(existingData));
       return existingData;
     } catch (error) {
-      console.error('📦 [fetchUserData] ❌ ERROR:', error);
+      console.error('Error fetching user data:', error);
       throw error;
     }
   };
@@ -108,30 +101,21 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
     if (loading) return; // Prevent double-click
     try {
       setLoading(true);
-      console.log('🔵 [Google SignIn] Step 1: Checking Play Services...');
       await GoogleSignin.hasPlayServices();
-      console.log('🔵 [Google SignIn] Step 2: Play Services OK. Opening Google Sign-In...');
       const response = await GoogleSignin.signIn();
-      console.log('🔵 [Google SignIn] Step 3: Google Sign-In response received. Success?', isSuccessResponse(response));
 
       if (isSuccessResponse(response)) {
         const { idToken, user } = response.data;
-        console.log('🔵 [Google SignIn] Step 4: idToken present?', !!idToken, '| User email:', user.email, '| User name:', user.name, '| Google User ID:', user.id);
 
         if (!idToken) {
           throw new Error('No ID token found from Google Sign-In');
         }
 
-        console.log('🔵 [Google SignIn] Step 5: Creating Firebase credential from Google token...');
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-        console.log('🔵 [Google SignIn] Step 6: Signing into Firebase with credential...');
         const fbAuthResult = await auth().signInWithCredential(googleCredential);
-        console.log('🔵 [Google SignIn] Step 7: ✅ Firebase auth success! Firebase UID:', fbAuthResult.user.uid, '| Firebase email:', fbAuthResult.user.email);
 
         // Fetch user data using the FIREBASE user ID
-        console.log('🔵 [Google SignIn] Step 8: Fetching/creating user data in Firestore...');
         const userData = await fetchUserData(fbAuthResult.user.uid, user.email);
-        console.log('🔵 [Google SignIn] Step 9: ✅ User data ready:', JSON.stringify(userData));
 
         dispatch(
           login({
@@ -145,14 +129,10 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
             token: idToken || fbAuthResult.user.uid,
           }),
         );
-        console.log('🔵 [Google SignIn] Step 10: ✅ Redux dispatch done. Navigation will happen automatically.');
         // Navigation is handled automatically by App.tsx conditional rendering
-      } else {
-        console.log('🔵 [Google SignIn] ⚠️ Response was NOT a success response:', JSON.stringify(response));
       }
     } catch (error: any) {
-      console.error('🔵 [Google SignIn] ❌ ERROR at some step:', error);
-      console.error('🔵 [Google SignIn] ❌ Error code:', error?.code, '| Error message:', error?.message);
+      console.error('Google Sign-In Error:', error);
       if (isErrorWithCode(error)) {
         handleGoogleSignInError(error);
       } else {
@@ -161,7 +141,6 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
       }
     } finally {
       setLoading(false);
-      console.log('🔵 [Google SignIn] DONE - Loading set to false.');
     }
   };
 

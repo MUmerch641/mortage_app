@@ -17,7 +17,6 @@ export const useSubscriptionCheck = () => {
 
       try {
         const status = await checkSubscriptionStatus(userDetails._user.uid);
-        console.log('Subscription status:', status);
 
         if (status.isSubscriptionExpired) {
           // Navigate to the Subscription drawer screen

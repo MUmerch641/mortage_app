@@ -27,7 +27,6 @@ const SplashScreen: React.FC = () => {
     const timer = setTimeout(() => {
       // Read from ref to get the token at the time the redirect happens,
       // not the (potentially stale) token captured when this effect ran.
-      console.log('🚀 [SplashScreen] Redirecting... token:', !!userTokenRef.current);
       navigation.replace(userTokenRef.current ? 'SegmentScreen' : 'LoginScreen', {});
     }, 2000);
     return () => clearTimeout(timer);
