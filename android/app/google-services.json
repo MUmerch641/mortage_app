@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "866570391057",
+    "project_id": "themortgagecalculatorapp",
+    "storage_bucket": "themortgagecalculatorapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:866570391057:android:7429ebdcb2cc430f6c2bb0",
+        "android_client_info": {
+          "package_name": "com.org.mortgagecalculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "866570391057-ga343evcrlfj13iu9o41ej1h18e76r60.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.org.mortgagecalculator",
+            "certificate_hash": "41ff1cb86728d361700311b92f37aa42e287e709"
+          }
+        },
+        {
+          "client_id": "866570391057-qpt11803hm1mgmo3sjos97orqjufvr7s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.org.mortgagecalculator",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "866570391057-rc89f51ei2ogsi8r1k40pqb06sk9deqc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.org.mortgagecalculator",
+            "certificate_hash": "2242bc63cf93a278610df471370b805d58c5fb92"
+          }
+        },
+        {
+          "client_id": "866570391057-i63du7rl56o0oaoaqn0ap5urejveqdgs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFQNXaVEcZW621UEMbK2CLF62GTgv9-Ds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "866570391057-i63du7rl56o0oaoaqn0ap5urejveqdgs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "866570391057-qoi2338b29agetv56oj0k4d5vgdaelhs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.org.mortgagecalculator"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
