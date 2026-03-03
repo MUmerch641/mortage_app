@@ -220,15 +220,19 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.signInWithText}>Sign In with</Text>
-        <View style={styles.socialIconsContainer}>
-          <SvgXml
-            onPress={signInWithGoogle}
-            xml={google}
-            width={40}
-            height={40}
-          />
-        </View>
+        {Platform.OS !== 'ios' && (
+          <>
+            <Text style={styles.signInWithText}>Sign In with</Text>
+            <View style={styles.socialIconsContainer}>
+              <SvgXml
+                onPress={signInWithGoogle}
+                xml={google}
+                width={40}
+                height={40}
+              />
+            </View>
+          </>
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );
