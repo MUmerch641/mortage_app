@@ -320,6 +320,7 @@ const SegmentScreen = () => {
             renderItem={renderSegmentItem}
             keyExtractor={item => item.id.toString()}
             contentContainerStyle={styles.segmentContainer}
+            style={{ maxHeight: 50 }}
           />
 
           {/* Content Container */}
@@ -424,19 +425,19 @@ const styles = StyleSheet.create({
   },
   segmentContainer: {
     paddingHorizontal: 10,
-    height: 60,
+    height: 50,
   },
   segmentButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    marginHorizontal: 5,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    marginHorizontal: 3,
     borderRadius: 10,
     backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#1d756d',
-    height: 50,
+    height: 40,
     width: 100,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

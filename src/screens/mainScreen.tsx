@@ -134,26 +134,10 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
     dispatch(layout1Form({ ...form, [field]: numericValue }));
   };
 
-  const handleFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>, ref: React.RefObject<TextInput | null>) => {
-    if (scrollViewRef.current && ref.current) {
-      ref.current.measure((x, y, width, height, pageX, pageY) => {
-        if (scrollViewRef.current?.scrollResponderScrollNativeHandleToKeyboard) {
-          scrollViewRef.current.scrollResponderScrollNativeHandleToKeyboard(
-            findNodeHandle(ref.current),
-            // Additional padding above the keyboard
-            120, // extraHeight
-            true // preventNegativeScrollOffset
-          );
-        } else {
-          // Fallback for older RN versions
-          scrollViewRef.current?.scrollTo({
-            y: pageY - 100,
-            animated: true
-          });
-        }
-      });
-    }
-  };
+  // No manual scrolling needed – automaticallyAdjustKeyboardInsets on the
+  // ScrollView handles bringing the focused input above the keyboard automatically.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleFocus = (_event: NativeSyntheticEvent<TextInputFocusEventData>, _ref: React.RefObject<TextInput | null>) => { };
 
   const moveToNextField = (nextField: React.RefObject<TextInput | null>) => {
     if (nextField?.current) {
@@ -175,12 +159,15 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
           <TextInput
             style={styles.input}
             keyboardType="decimal-pad"
+            placeholder="Enter monthly income"
+            placeholderTextColor="black"
             value={form.income ? form.income.toLocaleString() : ''}
             onFocus={(e) => handleFocus(e, incomeRef)}
             onChangeText={text => handleInputChange('income', text)}
             onBlur={() => handleBlur('income', form.income.toString())}
             returnKeyType="next"
-            onSubmitEditing={() => moveToNextField(isChecked ? dbrRef : additionalIncomeRef)}
+            blurOnSubmit={false}
+            onSubmitEditing={() => setTimeout(() => moveToNextField(isChecked ? dbrRef : additionalIncomeRef), 50)}
             ref={incomeRef}
           />
 
@@ -211,13 +198,15 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
                 ]}
                 keyboardType='decimal-pad'
                 placeholder="Enter additional income"
+                placeholderTextColor="black"
                 editable={!isChecked}
                 value={form.additionalIncome ? form.additionalIncome.toLocaleString() : ''}
                 onFocus={(e) => handleFocus(e, additionalIncomeRef)}
                 onChangeText={text => handleInputChange('additionalIncome', text)}
                 onBlur={() => handleBlur('additionalIncome', form.additionalIncome.toString())}
                 returnKeyType="next"
-                onSubmitEditing={() => moveToNextField(dbrRef)}
+                blurOnSubmit={false}
+                onSubmitEditing={() => setTimeout(() => moveToNextField(dbrRef), 50)}
                 ref={additionalIncomeRef}
               />
             )}
@@ -237,6 +226,8 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
           <TextInput
             style={styles.input}
             keyboardType="decimal-pad"
+            placeholder="Enter DBR %"
+            placeholderTextColor="black"
             value={isDbrFocused && form.dbr ? form.dbr.toString() : form.dbr ? `${form.dbr}%` : ''}
             onFocus={(e) => {
               handleFocus(e, dbrRef);
@@ -250,8 +241,8 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
               handleInputChange('dbr', text);
             }}
             returnKeyType="next"
-
-            onSubmitEditing={() => moveToNextField(dobRef)}
+            blurOnSubmit={false}
+            onSubmitEditing={() => setTimeout(() => moveToNextField(dobRef), 50)}
             ref={dbrRef}
           />
 
@@ -277,6 +268,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
           <TextInput
             style={[styles.input, error ? styles.inputError : null]}
             placeholder="DD/MM/YYYY"
+            placeholderTextColor="black"
             value={form.dob}
             onFocus={(e) => handleFocus(e, dobRef)}
             onChangeText={text => handleInputChange('dob', text)}
@@ -284,7 +276,8 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
             keyboardType="decimal-pad"
             maxLength={10}
             returnKeyType="next"
-            onSubmitEditing={() => moveToNextField(ageAtMaturityRef)}
+            blurOnSubmit={false}
+            onSubmitEditing={() => setTimeout(() => moveToNextField(ageAtMaturityRef), 50)}
             ref={dobRef}
           />
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -293,12 +286,15 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
           <TextInput
             style={styles.input}
             keyboardType="decimal-pad"
+            placeholder="Enter age at maturity"
+            placeholderTextColor="black"
             value={form.ageAtMaturity ? form.ageAtMaturity.toString() : ''}
             onFocus={(e) => handleFocus(e, ageAtMaturityRef)}
             onChangeText={text => handleInputChange('ageAtMaturity', text)}
             onBlur={() => handleBlur('ageAtMaturity', form.ageAtMaturity.toString())}
             returnKeyType="next"
-            onSubmitEditing={() => moveToNextField(bufferPeriodRef)}
+            blurOnSubmit={false}
+            onSubmitEditing={() => setTimeout(() => moveToNextField(bufferPeriodRef), 50)}
             ref={ageAtMaturityRef}
           />
 
@@ -306,6 +302,8 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
           <TextInput
             style={styles.input}
             keyboardType="decimal-pad"
+            placeholder="Enter buffer period"
+            placeholderTextColor="black"
             value={form.bufferPeriod ? form.bufferPeriod.toString() : ''}
             onFocus={(e) => handleFocus(e, bufferPeriodRef)}
             onChangeText={text => handleInputChange('bufferPeriod', text)}
@@ -315,14 +313,14 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
           />
         </ScrollView>
         <Footer
-            currentTab={currentTab}
-            totalTabs={totalTabs}
-            onBackPress={() => { }} // No action needed for first tab
-            onNextPress={async () => {
-              await dispatch(layout1Form(form));
-              navigateToTab(2)
-            }}
-          />
+          currentTab={currentTab}
+          totalTabs={totalTabs}
+          onBackPress={() => { }} // No action needed for first tab
+          onNextPress={async () => {
+            await dispatch(layout1Form(form));
+            navigateToTab(2)
+          }}
+        />
       </View>
     </SafeAreaView>
   );

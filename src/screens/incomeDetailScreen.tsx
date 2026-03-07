@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -14,19 +14,19 @@ import {
   findNodeHandle,
   Modal,
 } from 'react-native';
-import {useNavigation, NavigationProp} from '@react-navigation/native';
-import {SvgXml} from 'react-native-svg';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { SvgXml } from 'react-native-svg';
 import Header from '../components/Header';
-import {backButton, reset} from '../svg/index';
+import { backButton, reset } from '../svg/index';
 import Box from '../components/Box';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   incomeDetailFormValue,
   resetIncomeDetail,
 } from '../redux/slices/incomeDetailSlice';
-import {layout1Form} from '../redux/slices/layout1Slice';
-import {RootStackParamList} from '../../navigationTypes';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { layout1Form } from '../redux/slices/layout1Slice';
+import { RootStackParamList } from '../../navigationTypes';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type NavigationProps = NavigationProp<RootStackParamList, 'SegmentScreen'>;
 
@@ -54,7 +54,7 @@ const IncomeDetailsScreen: React.FC = () => {
   const [isPercentageConsideredFocused, setIsPercentageConsideredFocused] =
     useState(false);
   const localInitialState = {
-    rental: {yearlyIncome: 0, returnInvestment: 0, capLimit: 0, addedSalary: 0},
+    rental: { yearlyIncome: 0, returnInvestment: 0, capLimit: 0, addedSalary: 0 },
     bonus: {
       input1: 0,
       input2: 0,
@@ -117,9 +117,9 @@ const IncomeDetailsScreen: React.FC = () => {
     if (savedFormData) {
       setFormState(prevState => ({
         ...prevState,
-        rental: {...prevState.rental, ...savedFormData.rental},
-        bonus: {...prevState.bonus, ...savedFormData.bonus},
-        incentive: {...prevState.incentive, ...savedFormData.incentive},
+        rental: { ...prevState.rental, ...savedFormData.rental },
+        bonus: { ...prevState.bonus, ...savedFormData.bonus },
+        incentive: { ...prevState.incentive, ...savedFormData.incentive },
         schoolingAllowance: {
           ...prevState.schoolingAllowance,
           ...savedFormData.schoolingAllowance,
@@ -187,7 +187,7 @@ const IncomeDetailsScreen: React.FC = () => {
       // Update form state dynamically
       const updatedForm = {
         ...prevState,
-        [category]: {...prevState[category], [field]: sanitizedValue},
+        [category]: { ...prevState[category], [field]: sanitizedValue },
       };
 
       return updatedForm; // Ensure state is always updated
@@ -204,7 +204,7 @@ const IncomeDetailsScreen: React.FC = () => {
 
     const updatedForm = {
       ...formState,
-      [category]: {...formState[category], [field]: numericValue},
+      [category]: { ...formState[category], [field]: numericValue },
     };
 
     // Special handling for bonus and incentive categories
@@ -220,31 +220,11 @@ const IncomeDetailsScreen: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleFocus = (
     event: NativeSyntheticEvent<TextInputFocusEventData>,
     ref: React.RefObject<TextInput | null>,
-  ) => {
-    if (scrollViewRef.current && ref.current) {
-      ref.current.measure((x, y, width, height, pageX, pageY) => {
-        if (
-          scrollViewRef.current?.scrollResponderScrollNativeHandleToKeyboard
-        ) {
-          scrollViewRef.current.scrollResponderScrollNativeHandleToKeyboard(
-            findNodeHandle(ref.current),
-            // Additional padding above the keyboard
-            350, // extraHeight (adjust as needed)
-            true, // preventNegativeScrollOffset
-          );
-        } else {
-          // Fallback for older RN versions
-          scrollViewRef.current?.scrollTo({
-            y: pageY - 100,
-            animated: true,
-          });
-        }
-      });
-    }
-  };
+  ) => { };
 
   const calculateAndUpdate = useCallback(
     (updatedState: typeof formState, category: keyof typeof formState) => {
@@ -254,7 +234,7 @@ const IncomeDetailsScreen: React.FC = () => {
       switch (category) {
         case 'rental':
           {
-            const {yearlyIncome, returnInvestment, capLimit} =
+            const { yearlyIncome, returnInvestment, capLimit } =
               updatedState.rental;
             const monthlyIncome =
               (yearlyIncome * (returnInvestment / 100)) / 12;
@@ -301,7 +281,7 @@ const IncomeDetailsScreen: React.FC = () => {
         case 'schoolingAllowance':
         case 'ticketAllowance':
           {
-            const {yearlyAllowance, percentageConsidered} =
+            const { yearlyAllowance, percentageConsidered } =
               updatedState[category];
             addedSalary = (yearlyAllowance * percentageConsidered) / 100 / 12;
           }
@@ -317,8 +297,8 @@ const IncomeDetailsScreen: React.FC = () => {
         addedSalary: parseFloat(addedSalary.toFixed(2)), // Convert back to number
         ...(category === 'bonus' || category === 'incentive'
           ? {
-              average: parseFloat(average.toFixed(2)), // Convert back to number
-            }
+            average: parseFloat(average.toFixed(2)), // Convert back to number
+          }
           : {}),
       };
 
@@ -328,8 +308,8 @@ const IncomeDetailsScreen: React.FC = () => {
         addedSalary: addedSalary.toFixed(2),
         ...(category === 'bonus' || category === 'incentive'
           ? {
-              average: average.toFixed(2),
-            }
+            average: average.toFixed(2),
+          }
           : {}),
       };
 
@@ -374,7 +354,7 @@ const IncomeDetailsScreen: React.FC = () => {
               alignItems: 'center',
               height: 50,
             }}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
               Rental Income
             </Text>
           </Box>
@@ -413,8 +393,8 @@ const IncomeDetailsScreen: React.FC = () => {
             isReturnInvestmentFocused && formState.rental.returnInvestment
               ? formState.rental.returnInvestment.toString()
               : formState.rental.returnInvestment
-              ? `${formState.rental.returnInvestment}%`
-              : ''
+                ? `${formState.rental.returnInvestment}%`
+                : ''
           }
           onFocus={e => {
             handleFocus(e, returnInvestmentRef);
@@ -443,8 +423,8 @@ const IncomeDetailsScreen: React.FC = () => {
             isCapLimitFocused && formState.rental.capLimit
               ? formState.rental.capLimit.toString()
               : formState.rental.capLimit
-              ? `${formState.rental.capLimit}%`
-              : ''
+                ? `${formState.rental.capLimit}%`
+                : ''
           }
           onFocus={e => {
             handleFocus(e, capLimitRef);
@@ -466,7 +446,7 @@ const IncomeDetailsScreen: React.FC = () => {
         />
         <Text style={styles.label}>Amount will be added on (MFI)</Text>
         <View style={styles.calculatedInput}>
-          <Text style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: 'black' }}>
             {formatNumber(formState.rental.addedSalary)}
           </Text>
         </View>
@@ -493,7 +473,7 @@ const IncomeDetailsScreen: React.FC = () => {
               alignItems: 'center',
               height: 50,
             }}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
               Yearly Bonus
             </Text>
           </Box>
@@ -555,7 +535,7 @@ const IncomeDetailsScreen: React.FC = () => {
         />
         <Text style={styles.label}>Average</Text>
         <View style={styles.calculatedInput}>
-          <Text style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: 'black' }}>
             {formatNumber(formState.bonus.average)}
           </Text>
         </View>
@@ -568,8 +548,8 @@ const IncomeDetailsScreen: React.FC = () => {
             isPercentageAvgFocused && formState.bonus.percentageAvg
               ? formState.bonus.percentageAvg.toString()
               : formState.bonus.percentageAvg
-              ? `${formState.bonus.percentageAvg}%`
-              : ''
+                ? `${formState.bonus.percentageAvg}%`
+                : ''
           }
           onFocus={e => {
             handleFocus(e, percentageAvgRef);
@@ -591,7 +571,7 @@ const IncomeDetailsScreen: React.FC = () => {
         />
         <Text style={styles.label}>Amount will be added on (MFI)</Text>
         <View style={styles.calculatedInput}>
-          <Text style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: 'black' }}>
             {formatNumber(formState.bonus.addedSalary)}
           </Text>
         </View>
@@ -618,7 +598,7 @@ const IncomeDetailsScreen: React.FC = () => {
               alignItems: 'center',
               height: 50,
             }}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
               Monthly Incentive
             </Text>
           </Box>
@@ -759,7 +739,7 @@ const IncomeDetailsScreen: React.FC = () => {
         />
         <Text style={styles.label}>Average</Text>
         <View style={styles.calculatedInput}>
-          <Text style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: 'black' }}>
             {formatNumber(formState.incentive.average)}
           </Text>
         </View>
@@ -772,8 +752,8 @@ const IncomeDetailsScreen: React.FC = () => {
             isPercentageAvgIncFocused && formState.incentive.percentageAvg
               ? formState.incentive.percentageAvg.toString()
               : formState.incentive.percentageAvg
-              ? `${formState.incentive.percentageAvg}%`
-              : ''
+                ? `${formState.incentive.percentageAvg}%`
+                : ''
           }
           onFocus={e => {
             handleFocus(e, percentageAvgRefInc);
@@ -795,7 +775,7 @@ const IncomeDetailsScreen: React.FC = () => {
         />
         <Text style={styles.label}>Amount will be added on (MFI)</Text>
         <View style={styles.calculatedInput}>
-          <Text style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: 'black' }}>
             {formatNumber(formState.incentive.addedSalary)}
           </Text>
         </View>
@@ -822,7 +802,7 @@ const IncomeDetailsScreen: React.FC = () => {
               alignItems: 'center',
               height: 50,
             }}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
               Schooling Allowance
             </Text>
           </Box>
@@ -859,11 +839,11 @@ const IncomeDetailsScreen: React.FC = () => {
           keyboardType="decimal-pad"
           value={
             isPercentageConsideredFocused &&
-            formState.schoolingAllowance.percentageConsidered
+              formState.schoolingAllowance.percentageConsidered
               ? formState.schoolingAllowance.percentageConsidered.toString()
               : formState.schoolingAllowance.percentageConsidered
-              ? `${formState.schoolingAllowance.percentageConsidered}%`
-              : ''
+                ? `${formState.schoolingAllowance.percentageConsidered}%`
+                : ''
           }
           onFocus={e => {
             handleFocus(e, input2RefSA);
@@ -890,7 +870,7 @@ const IncomeDetailsScreen: React.FC = () => {
         />
         <Text style={styles.label}>Amount will be added on (MFI)</Text>
         <View style={styles.calculatedInput}>
-          <Text style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: 'black' }}>
             {formatNumber(formState.schoolingAllowance.addedSalary)}
           </Text>
         </View>
@@ -918,7 +898,7 @@ const IncomeDetailsScreen: React.FC = () => {
               alignItems: 'center',
               height: 50,
             }}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
               Ticket Allowance
             </Text>
           </Box>
@@ -955,11 +935,11 @@ const IncomeDetailsScreen: React.FC = () => {
           keyboardType="decimal-pad"
           value={
             isTicketPercentageFocused &&
-            formState.ticketAllowance.percentageConsidered
+              formState.ticketAllowance.percentageConsidered
               ? formState.ticketAllowance.percentageConsidered.toString()
               : formState.ticketAllowance.percentageConsidered
-              ? `${formState.ticketAllowance.percentageConsidered}%`
-              : ''
+                ? `${formState.ticketAllowance.percentageConsidered}%`
+                : ''
           }
           onFocus={e => {
             handleFocus(e, input2RefTA);
@@ -985,7 +965,7 @@ const IncomeDetailsScreen: React.FC = () => {
         />
         <Text style={styles.label}>Amount will be added on (MFI)</Text>
         <View style={styles.calculatedInput}>
-          <Text style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: 'black' }}>
             {formatNumber(formState.ticketAllowance.addedSalary)}
           </Text>
         </View>
@@ -1003,7 +983,7 @@ const IncomeDetailsScreen: React.FC = () => {
       return sum + numericAddedSalary;
     }, 0);
     // Store the total in finalValue
-    dispatch(layout1Form({...allValuesFromLayout1, additionalIncome: total}));
+    dispatch(layout1Form({ ...allValuesFromLayout1, additionalIncome: total }));
 
     navigation.navigate('SegmentScreen', {
       additionalIncome: total,
@@ -1017,7 +997,7 @@ const IncomeDetailsScreen: React.FC = () => {
   const resetAll = () => {
     setResetModalVisible(false);
     dispatch(resetIncomeDetail());
-    dispatch(layout1Form({...allValuesFromLayout1, additionalIncome: 0}));
+    dispatch(layout1Form({ ...allValuesFromLayout1, additionalIncome: 0 }));
     setFormState(localInitialState);
 
     setModalVisible2(true);
@@ -1028,7 +1008,7 @@ const IncomeDetailsScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        Platform?.OS === 'android' ? {paddingTop: insets.top} : {},
+        Platform?.OS === 'android' ? { paddingTop: insets.top } : {},
       ]}>
       <Header
         mainHeadingText={'Income Details'}
@@ -1040,7 +1020,7 @@ const IncomeDetailsScreen: React.FC = () => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.select({ios: 60, android: 0})}>
+        keyboardVerticalOffset={Platform.select({ ios: 60, android: 0 })}>
         <ScrollView
           ref={scrollViewRef}
           contentContainerStyle={styles.scrollContainer}
@@ -1048,7 +1028,7 @@ const IncomeDetailsScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
           automaticallyAdjustContentInsets={false}
           contentInsetAdjustmentBehavior="never">
-          <View style={{paddingBottom: 25}}>
+          <View style={{ paddingBottom: 25 }}>
             {rentalIncomeForm()}
             {handleBonusForm()}
             {handleIncentiveForm()}
@@ -1073,7 +1053,7 @@ const IncomeDetailsScreen: React.FC = () => {
                   backgroundColor: '#1d756d',
                   borderRadius: 15,
                 }}>
-                <Text style={{fontSize: 20, fontWeight: '700', color: 'white'}}>
+                <Text style={{ fontSize: 20, fontWeight: '700', color: 'white' }}>
                   Done
                 </Text>
               </TouchableOpacity>
@@ -1087,7 +1067,7 @@ const IncomeDetailsScreen: React.FC = () => {
           onRequestClose={() => setModalVisible2(false)}>
           <View style={styles.modalOverlay2}>
             <View style={styles.modalContent}>
-              <Text style={{color: 'black', fontSize: 20, fontWeight: '500'}}>
+              <Text style={{ color: 'black', fontSize: 20, fontWeight: '500' }}>
                 Refreshed
               </Text>
               {/* <Button title="close" onPress={() => setModalVisible(false)} /> */}
@@ -1148,7 +1128,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     backgroundColor: '#fff',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4}, // Higher height for a subtle downward shadow
+    shadowOffset: { width: 0, height: 4 }, // Higher height for a subtle downward shadow
     shadowOpacity: 0.5, // Lower opacity for a softer shadow
     shadowRadius: 4, // Adjust radius for softer shadow edges
     elevation: 10, // Adjust elevation to match the shadow effect across platforms
@@ -1163,7 +1143,7 @@ const styles = StyleSheet.create({
     minWidth: 50,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4}, // Higher height for a subtle downward shadow
+    shadowOffset: { width: 0, height: 4 }, // Higher height for a subtle downward shadow
     shadowOpacity: 0.5, // Lower opacity for a softer shadow
     shadowRadius: 4, // Adjust radius for softer shadow edges
     elevation: 10, // Adjust elevation to match the shadow effect across platforms

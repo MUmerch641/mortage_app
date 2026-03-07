@@ -551,26 +551,6 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
       field: string,
     ) => {
       setFocusedInput(field);
-      if (scrollViewRef.current && ref.current) {
-        ref.current.measure((x, y, width, height, pageX, pageY) => {
-          if (
-            scrollViewRef.current?.scrollResponderScrollNativeHandleToKeyboard
-          ) {
-            scrollViewRef.current.scrollResponderScrollNativeHandleToKeyboard(
-              findNodeHandle(ref.current),
-              // Additional padding above the keyboard
-              470, // extraHeight (adjust as needed)
-              true, // preventNegativeScrollOffset
-            );
-          } else {
-            // Fallback for older RN versions
-            scrollViewRef.current?.scrollTo({
-              y: pageY - 100,
-              animated: true,
-            });
-          }
-        });
-      }
     },
     [],
   );
@@ -879,6 +859,7 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
           ref={inputRefs.propertyValue}
           keyboardType="decimal-pad"
           placeholder="Enter property value"
+          placeholderTextColor="black"
           value={formatDisplayValue('propertyValue', form.propertyValue)}
           editable={!isChecked}
           onFocus={e =>
@@ -911,10 +892,15 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
     isChecked && newPropertyValue
       ? Number(newPropertyValue)
       : parseNumericValue(form.propertyValue);
-  const downPaymentValue =
+  const downPaymentRaw =
     propertyValueForDownPayment && financeValueForDownPayment
-      ? (propertyValueForDownPayment - financeValueForDownPayment).toLocaleString()
+      ? propertyValueForDownPayment - financeValueForDownPayment
       : 0;
+  const downPaymentError =
+    financeValueForDownPayment > 0 && propertyValueForDownPayment > 0 && downPaymentRaw < 0
+      ? 'Property value should be greater than finance amount'
+      : null;
+  const downPaymentValue = downPaymentError ? 0 : downPaymentRaw > 0 ? downPaymentRaw.toLocaleString() : 0;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -1017,6 +1003,8 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
               ]}
               ref={inputRefs.LTV}
               keyboardType="decimal-pad"
+              placeholder="Enter LTV %"
+              placeholderTextColor="black"
               value={formatDisplayValue('LTV', form.LTV)}
               onFocus={e => handleFocus(e, inputRefs.LTV, 'LTV')}
               onBlur={() => handleBlur('LTV', form.LTV.toString())}
@@ -1091,6 +1079,8 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
                   ]}
                   ref={inputRefs.totalTenureMonth}
                   keyboardType="decimal-pad"
+                  placeholder="Enter months"
+                  placeholderTextColor="black"
                   value={
                     convertToYears
                       ? displayValue
@@ -1170,6 +1160,8 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
                 ]}
                 ref={inputRefs.financeAmount}
                 keyboardType="decimal-pad"
+                placeholder="Enter finance amount"
+                placeholderTextColor="black"
                 value={
                   form.financeAmount ? form.financeAmount.toLocaleString() : ''
                 }
@@ -1256,6 +1248,18 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
                 }}>
                 Down payment {downPaymentValue}
               </Text>
+              {downPaymentError ? (
+                <Text
+                  style={{
+                    color: 'red',
+                    paddingHorizontal: 5,
+                    marginBottom: 8,
+                    fontWeight: '600',
+                    fontSize: 14,
+                  }}>
+                  {downPaymentError}
+                </Text>
+              ) : null}
               {/* ) : (
                 <Text style={{ color: 'red', padding: 5, marginVertical: 10, fontWeight: '600', fontSize: 16 }}>New DBR (%) would be calculated as soon as you fill up all the necessary fields.</Text>
               )} */}

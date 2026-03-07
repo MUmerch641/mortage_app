@@ -166,24 +166,6 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
     field: string,
   ) => {
     setFocusedField(field);
-    if (scrollViewRef.current && ref.current) {
-      ref.current.measure((x, y, width, height, pageX, pageY) => {
-        if (
-          scrollViewRef.current?.scrollResponderScrollNativeHandleToKeyboard
-        ) {
-          scrollViewRef.current.scrollResponderScrollNativeHandleToKeyboard(
-            findNodeHandle(ref.current),
-            350,
-            true,
-          );
-        } else {
-          scrollViewRef.current?.scrollTo({
-            y: pageY - 100,
-            animated: true,
-          });
-        }
-      });
-    }
   };
 
   const moveToNextField = (index: number) => {
@@ -273,10 +255,12 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
               <Text style={styles.label}>{item.label}</Text>
               <TextInput
                 ref={el => {
-                  inputRefs.current[index + 1] = el;
+                  inputRefs.current[index] = el;
                 }}
                 style={styles.input}
                 keyboardType="decimal-pad"
+                placeholder="Enter value"
+                placeholderTextColor="black"
                 value={formatDisplayValue(
                   item.field,
                   form[item.field as keyof typeof form],
@@ -284,7 +268,7 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
                 onFocus={event =>
                   handleFocus(
                     event,
-                    { current: inputRefs.current[index + 1] },
+                    { current: inputRefs.current[index] },
                     item.field,
                   )
                 }
@@ -297,15 +281,12 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
                 onChangeText={value =>
                   handleInputChange(item.field as keyof typeof form, value)
                 }
-                returnKeyType={index < 6 ? 'next' : 'done'}
-                onSubmitEditing={event => {
-                  handleBlur(
-                    item.field as keyof typeof form,
-                    form[item.field as keyof typeof form].toString(),
-                  );
-                  setTimeout(() => {
-                    moveToNextField(index + 1);
-                  }, 50);
+                returnKeyType={index < fields.length - 1 ? 'next' : 'done'}
+                blurOnSubmit={index >= fields.length - 1}
+                onSubmitEditing={() => {
+                  if (index < fields.length - 1) {
+                    setTimeout(() => moveToNextField(index), 50);
+                  }
                 }}
               />
             </View>

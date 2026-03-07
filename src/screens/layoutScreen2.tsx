@@ -178,26 +178,6 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
     field: string,
   ) => {
     setFocusedField(field);
-    if (scrollViewRef.current && ref.current) {
-      ref.current.measure((x, y, width, height, pageX, pageY) => {
-        if (
-          scrollViewRef.current?.scrollResponderScrollNativeHandleToKeyboard
-        ) {
-          scrollViewRef.current.scrollResponderScrollNativeHandleToKeyboard(
-            findNodeHandle(ref.current),
-            // Additional padding above the keyboard
-            120, // extraHeight
-            true, // preventNegativeScrollOffset
-          );
-        } else {
-          // Fallback for older RN versions
-          scrollViewRef.current?.scrollTo({
-            y: pageY - 150,
-            animated: true,
-          });
-        }
-      });
-    }
   };
 
   // Move Focus to Next Field
@@ -268,6 +248,8 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
                   }}
                   style={styles.input}
                   keyboardType="decimal-pad"
+                  placeholder="Enter amount"
+                  placeholderTextColor="black"
                   value={formatDisplayValue(
                     field as keyof typeof form,
                     form[field as keyof typeof form],
@@ -288,13 +270,12 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
                   onChangeText={value =>
                     handleChange(field as keyof typeof form, value)
                   }
-                  returnKeyType="next"
-                  onSubmitEditing={event => {
-                    handleBlur(
-                      field as keyof typeof form,
-                      form[field as keyof typeof form].toString(),
-                    );
-                    moveToNextField(index);
+                  returnKeyType={index < 5 ? 'next' : 'done'}
+                  blurOnSubmit={index >= 5}
+                  onSubmitEditing={() => {
+                    if (index < 5) {
+                      setTimeout(() => moveToNextField(index), 50);
+                    }
                   }}
                 />
               </View>
@@ -340,6 +321,8 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
                   }}
                   style={styles.input}
                   keyboardType="decimal-pad"
+                  placeholder={field === 'percentLiability' ? 'Enter %' : 'Enter amount'}
+                  placeholderTextColor="black"
                   value={formatDisplayValue(
                     field as keyof typeof form,
                     form[field as keyof typeof form],
@@ -361,12 +344,11 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
                     handleChange(field as keyof typeof form, value)
                   }
                   returnKeyType={index < 6 ? 'next' : 'done'}
-                  onSubmitEditing={event => {
-                    handleBlur(
-                      field as keyof typeof form,
-                      form[field as keyof typeof form].toString(),
-                    );
-                    moveToNextField(index + 6);
+                  blurOnSubmit={index >= 6}
+                  onSubmitEditing={() => {
+                    if (index < 6) {
+                      setTimeout(() => moveToNextField(index + 6), 50);
+                    }
                   }}
                 />
               </View>
@@ -390,37 +372,37 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
           // )} */}
         </ScrollView>
         <Footer
-            currentTab={currentTab}
-            totalTabs={totalTabs}
-            onBackPress={async () => {
-              await dispatch(layout2Form(form));
-              navigateToTab(1);
-            }}
-            onNextPress={async () => {
-              const fieldoBeBlurred = [
-                'monthlyInstallment1',
-                'monthlyInstallment2',
-                'monthlyInstallment3',
-                'monthlyInstallment4',
-                'monthlyInstallment5',
-                'monthlyInstallment6',
-                'percentLiability',
-                'creditCardLimit1',
-                'creditCardLimit2',
-                'creditCardLimit3',
-                'creditCardLimit4',
-                'creditCardLimit5',
-                'creditCardLimit6',
-              ].find((field, index) => focusedField === field);
-              if (fieldoBeBlurred) {
-                handleBlur(
-                  fieldoBeBlurred as keyof typeof form,
-                  form[fieldoBeBlurred as keyof typeof form].toString(),
-                );
-              }
-              navigateToTab(3);
-            }}
-          />
+          currentTab={currentTab}
+          totalTabs={totalTabs}
+          onBackPress={async () => {
+            await dispatch(layout2Form(form));
+            navigateToTab(1);
+          }}
+          onNextPress={async () => {
+            const fieldoBeBlurred = [
+              'monthlyInstallment1',
+              'monthlyInstallment2',
+              'monthlyInstallment3',
+              'monthlyInstallment4',
+              'monthlyInstallment5',
+              'monthlyInstallment6',
+              'percentLiability',
+              'creditCardLimit1',
+              'creditCardLimit2',
+              'creditCardLimit3',
+              'creditCardLimit4',
+              'creditCardLimit5',
+              'creditCardLimit6',
+            ].find((field, index) => focusedField === field);
+            if (fieldoBeBlurred) {
+              handleBlur(
+                fieldoBeBlurred as keyof typeof form,
+                form[fieldoBeBlurred as keyof typeof form].toString(),
+              );
+            }
+            navigateToTab(3);
+          }}
+        />
       </View>
     </SafeAreaView>
   );

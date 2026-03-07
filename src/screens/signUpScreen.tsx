@@ -177,7 +177,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ }) => {
           <TextInput
             style={styles.input}
             placeholder="Full Name"
-            placeholderTextColor={'#00000050'}
+            placeholderTextColor="black"
             value={formData.fullName}
             onChangeText={text => handleInputChange('fullName', text)}
           />
@@ -187,7 +187,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ }) => {
           <TextInput
             style={styles.input}
             placeholder="Email"
-            placeholderTextColor={'#00000050'}
+            placeholderTextColor="black"
             keyboardType="email-address"
             value={formData.email}
             onChangeText={text => handleInputChange('email', text)}
@@ -199,7 +199,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ }) => {
             <TextInput
               style={styles.input}
               placeholder="Password"
-              placeholderTextColor={'#00000050'}
+              placeholderTextColor="black"
               secureTextEntry={!visibility.password}
               value={formData.password}
               onChangeText={text => handleInputChange('password', text)}
@@ -215,7 +215,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ }) => {
             <TextInput
               style={styles.input}
               placeholder="Confirm Password"
-              placeholderTextColor={'#00000050'}
+              placeholderTextColor="black"
               secureTextEntry={!visibility.confirmPassword}
               value={formData.confirmPassword}
               onChangeText={text => handleInputChange('confirmPassword', text)}

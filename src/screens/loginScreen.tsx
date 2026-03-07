@@ -187,7 +187,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder="Email"
-            placeholderTextColor="#888"
+            placeholderTextColor="black"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -196,7 +196,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
             style={styles.input}
             placeholder="Password"
             secureTextEntry
-            placeholderTextColor="#888"
+            placeholderTextColor="black"
             value={password}
             onChangeText={setPassword}
           />

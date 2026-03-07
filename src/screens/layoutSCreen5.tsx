@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -17,16 +17,16 @@ import {
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Pdf from 'react-native-pdf';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import RNFS from 'react-native-fs';
-import {layout5Form} from '../redux/slices/layout5Slice';
-import {generateAmortizationSchedule} from '../utils/ammortizationTable';
-import {formatValue} from '../utils/helpers';
+import { layout5Form } from '../redux/slices/layout5Slice';
+import { generateAmortizationSchedule } from '../utils/ammortizationTable';
+import { formatValue } from '../utils/helpers';
 import Footer from '../components/Footer';
-import {MainScreenProps, MortgageRow} from '../utils/types';
-import {SvgXml} from 'react-native-svg';
-import {tick} from '../svg';
-import {MAX_TENURE_MONTHS} from '../utils/mortgageConstants';
+import { MainScreenProps, MortgageRow } from '../utils/types';
+import { SvgXml } from 'react-native-svg';
+import { tick } from '../svg';
+import { MAX_TENURE_MONTHS } from '../utils/mortgageConstants';
 
 const LayoutScreen5: React.FC<MainScreenProps> = ({
   navigateToTab,
@@ -41,7 +41,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
   const allValuesFromPropertyValue = useSelector(
     (state: any) => state.propertyValue,
   );
-  const {newPropertyValue, newFinanceAmount} = allValuesFromPropertyValue || {};
+  const { newPropertyValue, newFinanceAmount } = allValuesFromPropertyValue || {};
   const {
     interestType,
     fixedInterestRate,
@@ -51,7 +51,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
     lifeInsuranceRate,
     propertyInsuranceRate,
   } = allValuesFromLayout3 || {};
-  const {financeAmount, propertyValue, totalTenureMonth} =
+  const { financeAmount, propertyValue, totalTenureMonth } =
     allValuesFromLayout4 || {};
 
   const nameRef = useRef<TextInput>(null);
@@ -240,26 +240,6 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
     field: string,
   ) => {
     setFocusedInput(field);
-    if (scrollViewRef.current && ref.current) {
-      ref.current.measure((x, y, width, height, pageX, pageY) => {
-        if (
-          scrollViewRef.current?.scrollResponderScrollNativeHandleToKeyboard
-        ) {
-          scrollViewRef.current.scrollResponderScrollNativeHandleToKeyboard(
-            findNodeHandle(ref.current),
-            // Additional padding above the keyboard
-            550, // extraHeight (adjust as needed)
-            true, // preventNegativeScrollOffset
-          );
-        } else {
-          // Fallback for older RN versions
-          scrollViewRef.current?.scrollTo({
-            y: pageY - 100,
-            animated: true,
-          });
-        }
-      });
-    }
   };
 
   // Modified handleBlur to save data
@@ -270,7 +250,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
 
   // Unified save function
   const saveFieldToRedux = (field: string) => {
-    const updatedForm = {...form};
+    const updatedForm = { ...form };
     dispatch(layout5Form(updatedForm));
   };
 
@@ -339,14 +319,14 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
 
             <tbody>
               ${data
-                .map(
-                  item => `
+        .map(
+          item => `
                   <tr>
                     <td>${item.label}</td>
                     <td>${item.value}</td>
                   </tr>`,
-                )
-                .join('')}
+        )
+        .join('')}
             </tbody>
           </table>
        
@@ -369,8 +349,8 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
             </thead>
             <tbody>
               ${rows
-                .map(
-                  (row: MortgageRow) => `
+        .map(
+          (row: MortgageRow) => `
                   <tr>
                     <td>${row.month}</td>
                     <td>${row.interestRate}</td>
@@ -382,8 +362,8 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
                     <td>${row.propertyInsurance.split('.')[0]}</td>
                     <td>${row.grandTotal.split('.')[0]}</td>
                   </tr>`,
-                )
-                .join('')}
+        )
+        .join('')}
             </tbody>
           </table>
    
@@ -483,7 +463,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
                 paddingTop: 15,
               }}>
               {/* Label Text with Truncation */}
-              <Text style={{flex: 1, fontSize: 16, fontWeight: 700}}>
+              <Text style={{ flex: 1, fontSize: 16, fontWeight: 700 }}>
                 {item.label}
               </Text>
 
@@ -498,7 +478,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
                   minWidth: 50, // Fixed width to align values in a column
                   alignItems: 'center',
                 }}>
-                <Text style={{fontSize: 17, fontWeight: '700', color: 'black'}}>
+                <Text style={{ fontSize: 17, fontWeight: '700', color: 'black' }}>
                   {item.value}
                 </Text>
               </View>
@@ -513,6 +493,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
               focusedInput === 'name' && styles.inputFocused, // Green border if active
             ]}
             placeholder="Enter name"
+            placeholderTextColor="black"
             onFocus={e => handleFocus(e, nameRef, 'name')}
             onBlur={() => handleBlur('name')}
             value={form.name ? form.name : ''}
@@ -529,6 +510,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
               focusedInput === 'mobile' && styles.inputFocused, // Green border if active
             ]}
             placeholder="Enter mobile"
+            placeholderTextColor="black"
             onFocus={e => handleFocus(e, mobileRef, 'mobile')}
             onBlur={() => handleBlur('mobile')}
             value={form.mobile}
@@ -546,6 +528,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
               focusedInput === 'email' && styles.inputFocused, // Green border if active
             ]}
             placeholder="Enter email"
+            placeholderTextColor="black"
             value={form.email}
             onFocus={e => handleFocus(e, emailRef, 'email')}
             onBlur={() => handleBlur('email')}
@@ -563,6 +546,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
               focusedInput === 'company' && styles.inputFocused, // Green border if active
             ]}
             placeholder="Enter company"
+            placeholderTextColor="black"
             value={form.company}
             onFocus={e => handleFocus(e, companyRef, 'company')}
             onBlur={() => handleBlur('company')}
@@ -572,7 +556,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
           />
 
           <Text style={styles.label}>Remarks</Text>
-          <Text style={{marginTop: 4, fontWeight: '600', color: '#1d756d'}}>
+          <Text style={{ marginTop: 4, fontWeight: '600', color: '#1d756d' }}>
             BELOW FIGURES ARE ILLUSTRATIVE ONLY
           </Text>
           <TextInput
@@ -582,6 +566,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
               focusedInput === 'remarks' && styles.inputFocused, // Green border if active
             ]}
             placeholder="Enter remarks"
+            placeholderTextColor="black"
             value={form.remarks}
             onFocus={e => handleFocus(e, remarksRef, 'remarks')}
             onBlur={() => handleBlur('remarks')}
@@ -600,7 +585,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
               await dispatch(layout5Form(form));
               navigateToTab(4);
             }}
-            onNextPress={() => {}}
+            onNextPress={() => { }}
           />
         </ScrollView>
       </View>
@@ -608,7 +593,7 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
       <Modal visible={modalVisible} animationType="slide">
         <View style={styles.modalContainer}>
           <Pdf
-            source={pdfPath ? {uri: pdfPath} : {uri: ''}}
+            source={pdfPath ? { uri: pdfPath } : { uri: '' }}
             style={styles.pdfViewer}
             onError={error => console.error('PDF Load Error:', error)}
           />
@@ -633,9 +618,9 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
-  scrollContainer: {padding: 16, flexGrow: 1},
-  label: {fontSize: 16, fontWeight: 'bold', marginTop: 16},
+  container: { flex: 1, backgroundColor: '#fff' },
+  scrollContainer: { padding: 16, flexGrow: 1 },
+  label: { fontSize: 16, fontWeight: 'bold', marginTop: 16 },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -643,7 +628,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 8,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4}, // Increase height for downward shadow
+    shadowOffset: { width: 0, height: 4 }, // Increase height for downward shadow
     shadowOpacity: 0.3, // Adjust opacity to make it subtle
     shadowRadius: 3, // Adjust radius for soft shadow edges
     elevation: 3, // Lower elevation for a subtle shadow
@@ -656,7 +641,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: 'center',
   },
-  buttonText: {color: '#fff', fontSize: 18, fontWeight: '700'},
+  buttonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -682,7 +667,7 @@ const styles = StyleSheet.create({
   pdfButtons: {
     backgroundColor: '#1d756d',
     padding: 10,
-    marginBottom:10,
+    marginBottom: 10,
     borderRadius: 6,
   },
   inputFocused: {
