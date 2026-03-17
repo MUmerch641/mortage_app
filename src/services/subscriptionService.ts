@@ -15,7 +15,7 @@ export const checkSubscriptionStatus = async (userId: string) => {
 
     const userData = userDoc.data() as UserModel;
 
-    // Access is granted only when isPremium is true (set by IapService after IAP success)
+    // Access is granted only when isPremium is true (set by RevenueCat after purchase)
     const isPremium = userData.isPremium === true;
 
     return {

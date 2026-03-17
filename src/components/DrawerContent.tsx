@@ -14,6 +14,7 @@ import Box from './Box';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../redux/slices/userSlice';
 import { resetState } from '../redux/store';
+import { logoutRevenueCat } from '../services/RevenueCatService';
 
 const DrawerContent = (props: any) => {
   // const { navigation } = props;
@@ -42,13 +43,14 @@ const DrawerContent = (props: any) => {
       return () => backHandler.remove();
     }, [navigation])
   );
-  const handleLogout = () => {
+  const handleLogout = async () => {
     navigation.dispatch(DrawerActions.closeDrawer());
+    // Log out of RevenueCat so subscription state doesn't leak to the next user
+    await logoutRevenueCat();
     // Clear user state first (sets token to null), then reset app state.
     dispatch(logoutUser());
     dispatch(resetState());
     // Explicitly reset navigation to SplashScreen so there is no race condition
-    // between the conditional stack re-render and SegmentScreen's still-mounted state.
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

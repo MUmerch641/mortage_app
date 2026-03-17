@@ -1,36 +1,40 @@
 // src/hooks/useSubscriptionCheck.ts
 import { useEffect } from 'react';
-import { checkSubscriptionStatus } from '../services/subscriptionService';
+import { checkPremiumAccess } from '../services/RevenueCatService';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
+/**
+ * Periodically checks the user's subscription status via RevenueCat.
+ * RevenueCat validates against Apple/Google servers in real-time,
+ * so this will correctly detect expired subscriptions automatically.
+ */
 export const useSubscriptionCheck = () => {
   const navigation = useNavigation();
   const userDetails = useSelector((state: any) => state.user.details);
 
   useEffect(() => {
     const checkSubscription = async () => {
-      // Skip check if user is logged out
       if (!userDetails?._user?.uid) {
         return;
       }
 
       try {
-        const status = await checkSubscriptionStatus(userDetails._user.uid);
+        const isActive = await checkPremiumAccess(userDetails._user.uid);
 
-        if (status.isSubscriptionExpired) {
-          // Navigate to the Subscription drawer screen
+        if (!isActive) {
+          // RevenueCat confirmed subscription is expired or inactive
           navigation.navigate('Subscription' as never);
         }
       } catch (error) {
-        console.error('Subscription check error:', error);
+        console.error('[useSubscriptionCheck] Error:', error);
       }
     };
 
     // Initial check
     checkSubscription();
 
-    // Set up periodic checks (every 5 minutes)
+    // Periodic check every 5 minutes
     const interval = setInterval(checkSubscription, 5 * 60 * 1000);
 
     return () => clearInterval(interval);

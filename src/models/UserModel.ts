@@ -8,7 +8,7 @@ export interface UserModel {
   // --- Legacy trial fields (not set on new users) ---
   trialEndDate?: string;
   isTrialUsed?: boolean;
-  // --- Subscription fields (set by IapService after purchase) ---
+  // --- Subscription fields (managed by RevenueCat + synced to Firestore) ---
   subscriptionType?: 'monthly' | 'annual';
   subscriptionEndDate?: string;
   subscriptionStartDate?: string;

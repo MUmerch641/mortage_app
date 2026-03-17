@@ -25,20 +25,11 @@ import Instructions from './src/screens/instructions';
 import SplashScreen from './src/screens/splashScreen';
 import SignUpScreen from './src/screens/signUpScreen';
 import { RootStackParamList } from './navigationTypes';
-import { checkSubscriptionStatus } from './src/services/subscriptionService';
 import { useSubscriptionCheck } from './src/hooks/useSubscriptionCheck';
 import {
-  initializeIAP,
-  endIAPConnection,
+  initializeRevenueCat,
   checkPremiumAccess,
-  validateAndSyncPurchase,
-  SUBSCRIPTION_SKUS,
-} from './src/services/IapService';
-import {
-  getAvailablePurchases,
-  finishTransaction,
-  type SubscriptionPurchase,
-} from 'react-native-iap';
+} from './src/services/RevenueCatService';
 import { setCheckingSubscription } from './src/redux/slices/subscriptionSlice';
 
 
@@ -46,43 +37,7 @@ import { setCheckingSubscription } from './src/redux/slices/subscriptionSlice';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator();
 
-/**
- * Try to restore an active subscription from Google Play / App Store.
- * If found, syncs it to Firestore and returns true (user is subscribed).
- */
-async function tryRestoreFromPlayStore(userId?: string): Promise<boolean> {
-  if (!userId) return false;
 
-  try {
-    const purchases = await getAvailablePurchases();
-
-    if (!purchases || purchases.length === 0) {
-      return false;
-    }
-
-    const validSubscription = purchases.find(purchase =>
-      SUBSCRIPTION_SKUS.includes(purchase.productId),
-    );
-
-    if (validSubscription) {
-      await validateAndSyncPurchase(validSubscription as SubscriptionPurchase, userId);
-
-      // Finish all restored purchases so the store stops replaying them
-      for (const p of purchases) {
-        try {
-          await finishTransaction({ purchase: p as SubscriptionPurchase, isConsumable: false });
-        } catch (e) {
-          console.log('Error finishing restored transaction:', e);
-        }
-      }
-      return true;
-    }
-
-    return false;
-  } catch (error) {
-    return false;
-  }
-}
 
 // Stack Navigator Component
 function StackNavigation() {
@@ -97,46 +52,34 @@ function StackNavigation() {
     setRequiresSubscription(false);
 
     const checkSubscription = async () => {
-
-      // Signal to SegmentScreen (and any other screens) that we are mid-check
       store.dispatch(setCheckingSubscription(true));
 
       try {
         if (userToken && userDetails?._user?.uid) {
-          // Add a timeout so users are never stuck on the loading spinner
-          const timeoutPromise = new Promise((resolve) =>
-            setTimeout(() => resolve({
-              hasActiveSubscription: false,
-              isTrialActive: false,
-            }), 10000) // 10 second max wait
+          // Initialize RevenueCat with the user's UID so it can look up their subscription
+          await initializeRevenueCat(userDetails._user.uid);
+
+          // checkPremiumAccess asks RevenueCat's backend (which validates against Apple/Google)
+          // whether this user's subscription is currently active. This automatically handles
+          // expiry, renewals, and cancellations — no manual Firestore flag needed.
+          const timeoutPromise = new Promise<boolean>((resolve) =>
+            setTimeout(() => resolve(false), 10000)
           );
 
-          const status: any = await Promise.race([
-            checkSubscriptionStatus(userDetails._user.uid),
+          const isActive = await Promise.race([
+            checkPremiumAccess(userDetails._user.uid),
             timeoutPromise,
           ]);
 
-
-          if (!status.hasActiveSubscription && !status.isTrialActive) {
-            // Firestore says not subscribed — verify with Google Play before blocking
-            const restored = await tryRestoreFromPlayStore(userDetails._user.uid);
-            setRequiresSubscription(!restored);
-          } else {
-            setRequiresSubscription(false);
-          }
+          setRequiresSubscription(!isActive);
         } else {
           setSubscriptionChecked(true);
           store.dispatch(setCheckingSubscription(false));
           return;
         }
       } catch (error) {
-        // Try Google Play as a fallback before blocking the user
-        try {
-          const restored = await tryRestoreFromPlayStore(userDetails?._user?.uid);
-          setRequiresSubscription(!restored);
-        } catch {
-          setRequiresSubscription(true);
-        }
+        // Default to requiring subscription on any unexpected error
+        setRequiresSubscription(true);
       } finally {
         setSubscriptionChecked(true);
         store.dispatch(setCheckingSubscription(false));
@@ -194,22 +137,13 @@ function MainDrawerNavigator() {
 
   useSubscriptionCheck(); // Now this is safely inside NavigationContainer
 
-  // Initialize IAP ONCE on mount — never re-init when userDetails changes.
-  // initializeIAP is internally guarded against duplicate calls.
+  // Initialize RevenueCat ONCE on mount, and re-identify on user change
   useEffect(() => {
-    initializeIAP()
-      .then(result => {
-      })
-      .catch(err => {
-      });
-
-    // Cleanup on unmount only
-    return () => {
-      endIAPConnection();
-    };
+    initializeRevenueCat(userDetails?._user?.uid);
+    // RevenueCat has no disconnect — no cleanup needed
   }, []); // ← empty deps: runs once
 
-  // Check premium access whenever the logged-in user changes
+  // Check premium access via RevenueCat whenever the logged-in user changes
   useEffect(() => {
     if (userDetails?._user?.uid) {
       checkPremiumAccess(userDetails._user.uid);

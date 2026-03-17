@@ -25,6 +25,7 @@ import { login } from '../redux/slices/userSlice';
 import { google } from '../svg';
 import { GOOGLE_WEB_CLIENT_ID } from '../utils/constants';
 import { UserModel } from '../models/UserModel';
+import { initializeRevenueCat } from '../services/RevenueCatService';
 
 interface SignInScreenProps {
   navigation: {
@@ -83,6 +84,8 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
       const authInstance = getAuth();
       const response = await signInWithEmailAndPassword(authInstance, email, password);
       const userData = await fetchUserData(response.user.uid);
+      // Identify user in RevenueCat so their subscription status is linked to this UID
+      await initializeRevenueCat(response.user.uid);
       dispatch(
         login({
           details: { _user: userData },
@@ -116,7 +119,8 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
 
         // Fetch user data using the FIREBASE user ID
         const userData = await fetchUserData(fbAuthResult.user.uid, user.email);
-
+        // Identify user in RevenueCat for Google sign-in
+        await initializeRevenueCat(fbAuthResult.user.uid);
         dispatch(
           login({
             details: {

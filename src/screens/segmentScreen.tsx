@@ -151,7 +151,7 @@ const SegmentScreen = () => {
   };
 
   // Removed redundant checkIfUserIsSubscribed. 
-  // We now rely entirely on the Redux subscriptionState updated by App.tsx and IapService.
+  // We now rely entirely on the Redux subscriptionState updated by App.tsx via RevenueCat.
 
   const createUserDocument = async (uid: string, userData: any) => {
     try {

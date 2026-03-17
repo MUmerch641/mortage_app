@@ -2668,6 +2668,23 @@
     redux-thunk "^3.1.0"
     reselect "^5.1.0"
 
+"@revenuecat/purchases-js-hybrid-mappings@17.44.0":
+  version "17.44.0"
+  resolved "https://registry.npmjs.org/@revenuecat/purchases-js-hybrid-mappings/-/purchases-js-hybrid-mappings-17.44.0.tgz"
+  integrity sha512-8v8N0PR+AzWgZBHWeETt9md76xfqW+thgYZAdDSbTE2Tyd6NsbnbQLAxMQVHwC+2GyREBRqO2X0di3N+3jD6aw==
+  dependencies:
+    "@revenuecat/purchases-js" "1.27.0"
+
+"@revenuecat/purchases-js@1.27.0":
+  version "1.27.0"
+  resolved "https://registry.npmjs.org/@revenuecat/purchases-js/-/purchases-js-1.27.0.tgz"
+  integrity sha512-PRV5jbOyQ9ehNGyp0EeBV+Ri0T0QBTDJiftg7W0/eUFhGWs9irfw3ipQdjpmoikYxckrZQLzpsFhJ6zP/M+YgQ==
+
+"@revenuecat/purchases-typescript-internal@17.44.0":
+  version "17.44.0"
+  resolved "https://registry.npmjs.org/@revenuecat/purchases-typescript-internal/-/purchases-typescript-internal-17.44.0.tgz"
+  integrity sha512-YvSxMSiGLNNvqeIGrSwxqg5GjBkHBbB2MVSd/AvRnj97FGWsJ43kp7LMMNN6NHtghw4v42nVWG1IpznGvEOBww==
+
 "@shopify/restyle@^2.4.4":
   version "2.4.4"
   resolved "https://registry.npmjs.org/@shopify/restyle/-/restyle-2.4.4.tgz"
@@ -7311,11 +7328,6 @@ react-native-html-to-pdf@^0.12.0:
   resolved "https://registry.npmjs.org/react-native-html-to-pdf/-/react-native-html-to-pdf-0.12.0.tgz"
   integrity sha512-Yb5WO9SfF86s5Yv9PqXQ7fZDr9zZOJ+6jtweT9zFLraPNHWX7pSxe2dSkeg3cGiNrib65ZXGN6ksHymfYLFSSg==
 
-react-native-iap@^12.15.4:
-  version "12.15.4"
-  resolved "https://registry.npmjs.org/react-native-iap/-/react-native-iap-12.15.4.tgz"
-  integrity sha512-aGBlXZHo4mH+xqrvSj916WQhbc1VQPcpK8uLHCthcbttNlBjnZGvENVjoi/ULHSLB9l9agBewIJqdXbA9VlOEg==
-
 react-native-is-edge-to-edge@1.1.6:
   version "1.1.6"
   resolved "https://registry.npmjs.org/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.1.6.tgz"
@@ -7338,6 +7350,14 @@ react-native-print@^0.11.0:
   version "0.11.0"
   resolved "https://registry.npmjs.org/react-native-print/-/react-native-print-0.11.0.tgz"
   integrity sha512-hFDzb9dVJVT8c3VHNNWgkPfLF3Jfyw0WVJ3o7wUmSMmi5hJx6b++veNJ3J95d3lW3Y0sZUpGbn9+yzXrLANnJQ==
+
+react-native-purchases@^9.11.2:
+  version "9.11.2"
+  resolved "https://registry.npmjs.org/react-native-purchases/-/react-native-purchases-9.11.2.tgz"
+  integrity sha512-u+uyve9PKaqoK+SwsGTUNZbIy8ket4D0Px4fgI5XHtq18TlXV6gOAnwnRm61cxNhjP/H1ElGXC4z05zm1LfocA==
+  dependencies:
+    "@revenuecat/purchases-js-hybrid-mappings" "17.44.0"
+    "@revenuecat/purchases-typescript-internal" "17.44.0"
 
 react-native-reanimated@^3.17.1, "react-native-reanimated@>= 2.0.0":
   version "3.17.1"
@@ -7438,7 +7458,7 @@ react-native-windows@*, react-native-windows@>=0.62:
     ws "^6.2.3"
     yargs "^17.6.2"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@^0.0.0-0 || >=0.65 <1.0", react-native@^0.78.0, react-native@>=0.65.1, react-native@>=0.73.0, "react-native@>=0.8.0 || 0.8.0-rc || 0.8.0-rc.2 || 0.9.0-rc || 0.10.1", react-native@0.78.0:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@^0.0.0-0 || >=0.65 <1.0", react-native@^0.78.0, "react-native@>= 0.73.0", react-native@>=0.73.0, "react-native@>=0.8.0 || 0.8.0-rc || 0.8.0-rc.2 || 0.9.0-rc || 0.10.1", react-native@0.78.0:
   version "0.78.0"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.78.0.tgz"
   integrity sha512-3PO4tNvCN6BdAKcoY70v1sLfxYCmDR4KS1VTY+kIBKy5Qznp27QNxL7zBQjvS6Jp91gc8N82QbysQrfBlwg9gQ==
@@ -7509,7 +7529,7 @@ react-test-renderer@19.0.0:
     react-is "^19.0.0"
     scheduler "^0.25.0"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.9.0 || ^17.0.0 || ^18 || ^19", "react@^18.0 || ^19", react@^19.0.0, "react@>= 18.2.0", react@>=16.13.1, react@>=16.8, react@>=17.0.0, react@>=18.2.0, react@19.0.0:
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.9.0 || ^17.0.0 || ^18 || ^19", "react@^18.0 || ^19", react@^19.0.0, "react@>= 16.6.3", "react@>= 18.2.0", react@>=16.8, react@>=17.0.0, react@>=18.2.0, react@19.0.0:
   version "19.0.0"
   resolved "https://registry.npmjs.org/react/-/react-19.0.0.tgz"
   integrity sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==

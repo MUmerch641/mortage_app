@@ -16,6 +16,7 @@ import {
   Image,
   BackHandler,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import Header from '../components/Header';
 import { SvgXml } from 'react-native-svg';
@@ -24,14 +25,13 @@ import Box from '../components/Box';
 import { useSelector } from 'react-redux';
 import { RootStackParamList } from '../../navigationTypes';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { checkSubscriptionStatus } from '../services/subscriptionService';
 import {
-  getSubscriptionProducts,
-  purchaseSubscription,
+  checkPremiumAccess,
+  getSubscriptionPackages,
+  purchasePackage,
   restorePurchases,
-  SUBSCRIPTION_SKUS,
-} from '../services/IapService';
-import type { Subscription as IAPSubscription } from 'react-native-iap';
+} from '../services/RevenueCatService';
+import type { PurchasesPackage } from 'react-native-purchases';
 
 type NavigationProps = NavigationProp<RootStackParamList, 'Subscription'>;
 
@@ -44,7 +44,7 @@ const Subscription: React.FC<any> = ({ route }) => {
   const [userSubscribed, setUserSubscribed] = useState(
     userDetails?._user?.isPremium === true || subscriptionState?.isPremium === true
   );
-  const [products, setProducts] = useState<IAPSubscription[]>([]);
+  const [products, setProducts] = useState<PurchasesPackage[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [purchasing, setPurchasing] = useState(false);
   const [isVerifyingStatus, setIsVerifyingStatus] = useState(true);
@@ -66,20 +66,18 @@ const Subscription: React.FC<any> = ({ route }) => {
     return () => backHandler.remove();
   }, [userSubscribed]);
 
-  // Check subscription status
+  // Check subscription status directly via RevenueCat (real-time, server-validated)
   useEffect(() => {
     let isMounted = true;
     const checkStatus = async () => {
       setIsVerifyingStatus(true);
       try {
-        if (userDetails?._user?.uid) {
-          const status = await checkSubscriptionStatus(userDetails._user.uid);
-          if (isMounted) {
-            setUserSubscribed(status.hasActiveSubscription);
-          }
+        const isActive = await checkPremiumAccess(userDetails?._user?.uid);
+        if (isMounted) {
+          setUserSubscribed(isActive);
         }
       } catch (error) {
-        console.error('--- SUBSCRIPTION SCREEN: Status verify error:', error);
+        console.error('[Subscription] Status verify error:', error);
       } finally {
         if (isMounted) {
           setIsVerifyingStatus(false);
@@ -112,15 +110,15 @@ const Subscription: React.FC<any> = ({ route }) => {
   }, [userSubscribed, isVerifyingStatus, navigation]);
 
 
-  // Fetch IAP products when screen focuses
+  // Fetch packages from RevenueCat when screen focuses
   useEffect(() => {
     const fetchProducts = async () => {
       setLoadingProducts(true);
       try {
-        const subs = await getSubscriptionProducts();
-        setProducts(subs);
+        const packages = await getSubscriptionPackages();
+        setProducts(packages);
       } catch (error) {
-        console.error('--- SUBSCRIPTION SCREEN: Error fetching products:', error);
+        console.error('[Subscription] Error fetching packages:', error);
       } finally {
         setLoadingProducts(false);
       }
@@ -146,65 +144,48 @@ const Subscription: React.FC<any> = ({ route }) => {
 
   // Handle purchase button press
   const handlePurchase = async () => {
-    setPurchasing(true);
-
-    const sku = SUBSCRIPTION_SKUS[0]; // mortgage_monthly_sub_10
-
-    // On Android, extract the offerToken from already-fetched products
-    let offerToken: string | undefined;
-    if (Platform.OS === 'android' && products.length > 0) {
-      const product: any = products[0];
-      offerToken = product?.subscriptionOfferDetails?.[0]?.offerToken;
+    if (products.length === 0) {
+      Alert.alert(
+        'Not Available',
+        'Subscription packages could not be loaded. This usually means Google Play Billing is not available on this device/build. Please try on the release version installed via the Play Store.',
+      );
+      return;
     }
-
+    setPurchasing(true);
     try {
-      await purchaseSubscription(sku, offerToken);
-      // purchaseSubscription resolves when the Google Play dialog closes,
-      // whether the user completed the purchase OR cancelled it.
-      // If successful, the purchaseUpdatedListener in IapService will
-      // update Redux (isPremium: true) and the useEffect above will
-      // set userSubscribed = true.
+      const success = await purchasePackage(products[0], userDetails?._user?.uid);
+      if (success) {
+        setUserSubscribed(true);
+      }
+      // If success === false and no error thrown, it means user cancelled — do nothing
     } catch (error) {
-      console.error('--- SUBSCRIPTION SCREEN: Purchase error:', error);
+      console.error('[Subscription] Purchase error:', error);
     } finally {
-      // ALWAYS stop the spinner when the Google Play dialog closes,
-      // regardless of success or cancellation. This runs immediately.
       setPurchasing(false);
     }
   };
 
   // Handle restore purchases
   const handleRestore = async () => {
-    if (!userDetails?._user?.uid) {
-      return;
-    }
     setPurchasing(true);
     try {
-      const restored = await restorePurchases(userDetails._user.uid);
+      const restored = await restorePurchases(userDetails?._user?.uid);
       if (restored) {
         setUserSubscribed(true);
       }
     } catch (error) {
-      console.error('--- SUBSCRIPTION SCREEN: Restore error:', error);
+      console.error('[Subscription] Restore error:', error);
     } finally {
       setPurchasing(false);
     }
   };
 
-  // Get display price from fetched products, or fallback
+  // Get display price from RevenueCat package, or fallback
   const getDisplayPrice = (): string => {
     if (products.length > 0) {
-      const product: any = products[0];
-      // iOS has localizedPrice, Android uses subscriptionOfferDetails
-      if (product.localizedPrice) {
-        return product.localizedPrice;
-      }
-      if (product.subscriptionOfferDetails?.[0]?.pricingPhases?.pricingPhaseList?.[0]?.formattedPrice) {
-        return product.subscriptionOfferDetails[0].pricingPhases.pricingPhaseList[0].formattedPrice;
-      }
-      if (product.price) {
-        return product.price;
-      }
+      const pkg = products[0];
+      // RevenueCat provides a clean localizedPriceString on the product
+      return pkg.product?.priceString ?? pkg.product?.price?.toString() ?? 'AED 10';
     }
     return 'AED 10';
   };

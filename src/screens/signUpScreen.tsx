@@ -18,6 +18,7 @@ import { login } from '../redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { UserModel } from '../models/UserModel';
+import { initializeRevenueCat } from '../services/RevenueCatService';
 
 // Define types for formData and visibility
 interface FormData {
@@ -104,7 +105,8 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ }) => {
       };
 
       await createUserDocument(userData);
-
+      // Identify new user in RevenueCat immediately after account creation
+      await initializeRevenueCat(userCredential.user.uid);
       dispatch(
         login({
           details: {
