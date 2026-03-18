@@ -1,0 +1,42 @@
+[debug] [2026-03-17T14:59:05.568Z] ----------------------------------------------------------------------
+[debug] [2026-03-17T14:59:05.573Z] Command:       /Users/muhammadumer/.nvm/versions/node/v20.19.5/bin/node /Users/muhammadumer/.nvm/versions/node/v20.19.5/bin/firebase login --interactive
+[debug] [2026-03-17T14:59:05.573Z] CLI Version:   15.10.1
+[debug] [2026-03-17T14:59:05.573Z] Platform:      darwin
+[debug] [2026-03-17T14:59:05.573Z] Node Version:  v20.19.5
+[debug] [2026-03-17T14:59:05.574Z] Time:          Tue Mar 17 2026 19:59:05 GMT+0500 (Pakistan Standard Time)
+[debug] [2026-03-17T14:59:05.574Z] ----------------------------------------------------------------------
+[debug] 
+[info] i  The Firebase CLI’s MCP server feature can optionally make use of Gemini in Firebase. Learn more about Gemini in Firebase and how it uses your data: https://firebase.google.com/docs/gemini-in-firebase#how-gemini-in-firebase-uses-your-data 
+[info] 
+[info] i  Firebase optionally collects CLI and Emulator Suite usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=985114659&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...
+[debug] [2026-03-17T14:59:21.355Z] >>> [apiv2][query] POST https://accounts.google.com/o/oauth2/token [none]
+[debug] [2026-03-17T14:59:21.356Z] >>> [apiv2][body] POST https://accounts.google.com/o/oauth2/token [omitted]
+[debug] [2026-03-17T14:59:21.680Z] *** [apiv2] error from fetch(https://accounts.google.com/o/oauth2/token, {"headers":{},"method":"POST","body":{"_overheadLength":543,"_valueLength":208,"_valuesToMeasure":[],"writable":false,"readable":true,"dataSize":0,"maxDataSize":2097152,"pauseStreams":true,"_released":true,"_streams":[],"_currentStream":null,"_insideLoop":false,"_pendingNext":false,"_boundary":"--------------------------02d4d2c02d3701e4e3906572","_events":{},"_eventsCount":1}}): FetchError: request to https://accounts.google.com/o/oauth2/token failed, reason: 
+[debug] [2026-03-17T14:59:21.681Z] Token Fetch Error: FirebaseError: Failed to make request to https://accounts.google.com/o/oauth2/token
+    at RetryOperation._fn (/Users/muhammadumer/.nvm/versions/node/v20.19.5/lib/node_modules/firebase-tools/lib/apiv2.js:282:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-03-17T14:59:21.690Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2026-03-17T14:59:21.690Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"8e0a71fc-bfa3-479e-97cb-b8d4b2aa6b37"}
+[debug] [2026-03-17T14:59:22.530Z] <<< [apiv2][status] POST https://auth.firebase.tools/attest 200
+[debug] [2026-03-17T14:59:22.531Z] <<< [apiv2][body] POST https://auth.firebase.tools/attest {"token":"JsNFpsELxAhCgMVVOzH1qHxOSQeRasuHqI9wJv11dAw"}
+[info] 
+[info] To sign in to the Firebase CLI:
+[info] 
+[info] 1. Take note of your session ID:
+[info] 
+[info]    8E0A7
+[info] 
+[info] 2. Visit the URL below on any device and follow the instructions to get your code:
+[info] 
+[info]    https://auth.firebase.tools/login?code_challenge=49E4q2NXPaojNvs8Ka6MlFS8YZdfmIVC0vH8BrQDk8o&session=8e0a71fc-bfa3-479e-97cb-b8d4b2aa6b37&attest=JsNFpsELxAhCgMVVOzH1qHxOSQeRasuHqI9wJv11dAw
+[info] 
+[info] 3. Paste or enter the authorization code below once you have it:
+[info] 

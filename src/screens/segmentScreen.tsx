@@ -22,6 +22,7 @@ import {
   useNavigation,
   useRoute,
   StackActions,
+  useIsFocused,
 } from '@react-navigation/native';
 import { SvgXml } from 'react-native-svg';
 import { hamburgerColor, reset } from '../svg';
@@ -63,6 +64,7 @@ const SegmentScreen = () => {
   const propertyValue = route?.params?.propertyValue;
 
   const navigation = useNavigation<DrawerNavigation>();
+  const isFocused = useIsFocused(); // Check if this screen is currently active
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const slideAnim = useState(new Animated.Value(-50))[0]; // Animation for sliding
@@ -78,14 +80,21 @@ const SegmentScreen = () => {
   const userToken = useSelector((state: any) => state.user.token);
   const subscriptionState = useSelector((state: any) => state.subscription);
 
-  // A user is premium if EITHER their core user object says so, or the dedicated subscription state says so.
-  const isPremiumUser = userDetails?._user?.isPremium === true || subscriptionState?.isPremium === true;
-  // isCheckingSubscription is set by App.tsx while it does the post-login Firestore/Google Play check.
-  // We MUST NOT show the paywall while this check is still running.
+  // PRIORITIZE RevenueCat state (subscriptionState.isPremium) over Firestore (userDetails).
+  // Firestore data is often cached and stale right after a cancellation,
+  // whereas RevenueCat state in Redux is updated immediately by our foreground listener.
+  const isPremiumUser = subscriptionState?.isPremium === true || userDetails?._user?.isPremium === true;
+
+  // isCheckingSubscription is set by App.tsx during the post-login/foreground check.
   const isCheckingSubscription = subscriptionState?.isCheckingSubscription === true;
-  // CRITICAL: Never show the modal when logged out — StackNavigation handles routing to login.
-  // Without this guard the modal appears over the login screen after logout.
-  const isModalVisible = !!userToken && !isPremiumUser && !isCheckingSubscription;
+
+  // CRITICAL: Modal should ONLY be visible if:
+  // 1. User is logged in (userToken exists)
+  // 2. User is NOT premium according to RevenueCat/Redux
+  // 3. We are NOT currently in the middle of a subscription check
+  // 4. This specific screen (SegmentScreen) IS FOCUSED.
+  // This @react-navigation check prevents the modal from showing over the Subscription screen.
+  const isModalVisible = isFocused && !!userToken && !isPremiumUser && !isCheckingSubscription;
 
   const userId = userDetails?._user?.id || userDetails?._user?.uid;
 

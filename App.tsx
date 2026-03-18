@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, AppState, AppStateStatus, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -43,11 +43,21 @@ const Drawer = createDrawerNavigator();
 function StackNavigation() {
   const userToken = useSelector((state: any) => state.user.token);
   const userDetails = useSelector((state: any) => state.user.details);
+  // Last known premium state from persisted Redux — used as offline/timeout fallback
+  // so we NEVER lock out a premium user just because the network is slow or unavailable.
+  const cachedIsPremium = useSelector((state: any) => state.subscription?.isPremium === true);
   const [subscriptionChecked, setSubscriptionChecked] = useState(false);
   const [requiresSubscription, setRequiresSubscription] = useState(false);
 
+  const appState = useRef(AppState.currentState);
+
   useEffect(() => {
-    // Reset states when user changes (login/logout)
+    // Always reset stuck isCheckingSubscription from a previous crash/hard-kill.
+    // Without this, a crash mid-check leaves isCheckingSubscription=true in
+    // redux-persist forever, which hides the paywall indefinitely.
+    store.dispatch(setCheckingSubscription(false));
+
+    // Reset local gate states when the user account changes (login/logout)
     setSubscriptionChecked(false);
     setRequiresSubscription(false);
 
@@ -56,14 +66,12 @@ function StackNavigation() {
 
       try {
         if (userToken && userDetails?._user?.uid) {
-          // Initialize RevenueCat with the user's UID so it can look up their subscription
           await initializeRevenueCat(userDetails._user.uid);
 
-          // checkPremiumAccess asks RevenueCat's backend (which validates against Apple/Google)
-          // whether this user's subscription is currently active. This automatically handles
-          // expiry, renewals, and cancellations — no manual Firestore flag needed.
+          // Timeout fallback: if RevenueCat is slow (e.g., offline), use the
+          // persisted Redux state so premium users are never locked out.
           const timeoutPromise = new Promise<boolean>((resolve) =>
-            setTimeout(() => resolve(false), 10000)
+            setTimeout(() => resolve(cachedIsPremium), 10000)
           );
 
           const isActive = await Promise.race([
@@ -78,8 +86,8 @@ function StackNavigation() {
           return;
         }
       } catch (error) {
-        // Default to requiring subscription on any unexpected error
-        setRequiresSubscription(true);
+        // On unexpected error fall back to cached state — never lock out a paying user
+        setRequiresSubscription(!cachedIsPremium);
       } finally {
         setSubscriptionChecked(true);
         store.dispatch(setCheckingSubscription(false));
@@ -87,7 +95,27 @@ function StackNavigation() {
     };
 
     checkSubscription();
-  }, [userToken, userDetails]);
+
+    // Re-validate the moment the user returns from Google Play / App Store settings.
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        checkSubscription();
+      }
+      appState.current = nextAppState;
+    };
+
+    const appStateSubscription = AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      appStateSubscription.remove();
+    };
+  // Only re-run when the actual user account changes (uid or token), NOT on every
+  // userDetails object update (e.g. displayName, Firestore writes) which would
+  // cause unnecessary re-checks and trigger the loading spinner repeatedly.
+  }, [userToken, userDetails?._user?.uid]);
 
   if (!subscriptionChecked) {
     return (
@@ -137,18 +165,14 @@ function MainDrawerNavigator() {
 
   useSubscriptionCheck(); // Now this is safely inside NavigationContainer
 
-  // Initialize RevenueCat ONCE on mount, and re-identify on user change
+  // Initialize RevenueCat ONCE on mount with the current user ID
   useEffect(() => {
     initializeRevenueCat(userDetails?._user?.uid);
-    // RevenueCat has no disconnect — no cleanup needed
-  }, []); // ← empty deps: runs once
+  }, []); // ← empty deps: runs once on mount
 
-  // Check premium access via RevenueCat whenever the logged-in user changes
-  useEffect(() => {
-    if (userDetails?._user?.uid) {
-      checkPremiumAccess(userDetails._user.uid);
-    }
-  }, [userDetails?._user?.uid]);
+  // NOTE: checkPremiumAccess on user change is handled by StackNavigation's
+  // useEffect — removing the duplicate call here prevents 3-4 concurrent
+  // RevenueCat requests firing simultaneously on every login.
 
   return (
     <Drawer.Navigator
