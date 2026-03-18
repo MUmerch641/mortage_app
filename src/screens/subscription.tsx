@@ -311,11 +311,17 @@ const Subscription: React.FC<any> = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          {/* Play Store legal disclaimer */}
+          {/* Platform-aware legal disclaimer */}
           <Text style={styles.legalText}>
-            Payment will be charged to your Google Play account at confirmation
-            of purchase. Subscription automatically renews unless cancelled at
-            least 24 hours before the end of the current period.{'\n'}
+            Payment will be charged to your{' '}
+            {Platform.select({
+              ios: 'App Store account',
+              android: 'Google Play account',
+              default: 'account',
+            })}{' '}
+            at confirmation of purchase. Subscription automatically renews
+            unless cancelled at least 24 hours before the end of the current
+            period.{'\n'}
             <Text
               style={styles.legalLink}
               onPress={() => {}}>
