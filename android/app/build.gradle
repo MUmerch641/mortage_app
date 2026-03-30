@@ -83,8 +83,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy 'store', 'play' // Use Google Play billing (not Amazon)
-        versionCode 24
-        versionName "2.11"
+        versionCode 26
+        versionName "2.13"
     }
     signingConfigs {
         debug {

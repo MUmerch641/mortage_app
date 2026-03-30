@@ -217,14 +217,19 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
           <Box
             style={{
               justifyContent: 'center',
-              width: 120,
-              padding: 10,
+              alignSelf: 'flex-start',
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: '700', color: '#ffff' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: '700', color: '#ffff' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Liabilities
             </Text>
           </Box>
@@ -286,15 +291,20 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
           <Box
             style={{
               justifyContent: 'center',
-              width: 150,
-              padding: 10,
+              alignSelf: 'flex-start',
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
               marginTop: 10,
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: '700', color: '#ffff' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: '700', color: '#ffff' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Credit Cards
             </Text>
           </Box>

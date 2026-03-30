@@ -348,13 +348,18 @@ const IncomeDetailsScreen: React.FC = () => {
           <Box
             style={{
               justifyContent: 'center',
-              padding: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Rental Income
             </Text>
           </Box>
@@ -467,13 +472,18 @@ const IncomeDetailsScreen: React.FC = () => {
           <Box
             style={{
               justifyContent: 'center',
-              padding: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Yearly Bonus
             </Text>
           </Box>
@@ -592,13 +602,18 @@ const IncomeDetailsScreen: React.FC = () => {
           <Box
             style={{
               justifyContent: 'center',
-              padding: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Monthly Incentive
             </Text>
           </Box>
@@ -796,13 +811,18 @@ const IncomeDetailsScreen: React.FC = () => {
           <Box
             style={{
               justifyContent: 'center',
-              padding: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Schooling Allowance
             </Text>
           </Box>
@@ -891,14 +911,18 @@ const IncomeDetailsScreen: React.FC = () => {
           <Box
             style={{
               justifyContent: 'center',
-              // width: 160,
-              padding: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Ticket Allowance
             </Text>
           </Box>
@@ -1017,15 +1041,13 @@ const IncomeDetailsScreen: React.FC = () => {
         leftIcon={<SvgXml width="16" height="16" xml={backButton} />}
         rightIcon={<SvgXml width="48" height="48" xml={reset} />}
       />
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.select({ ios: 60, android: 0 })}>
+      <View style={styles.container}>
         <ScrollView
           ref={scrollViewRef}
           contentContainerStyle={styles.scrollContainer}
-          keyboardShouldPersistTaps="handled" // Changed from "never"
+          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
+          automaticallyAdjustKeyboardInsets={true}
           automaticallyAdjustContentInsets={false}
           contentInsetAdjustmentBehavior="never">
           <View style={{ paddingBottom: 25 }}>
@@ -1070,7 +1092,6 @@ const IncomeDetailsScreen: React.FC = () => {
               <Text style={{ color: 'black', fontSize: 20, fontWeight: '500' }}>
                 Refreshed
               </Text>
-              {/* <Button title="close" onPress={() => setModalVisible(false)} /> */}
             </View>
           </View>
         </Modal>
@@ -1101,7 +1122,7 @@ const IncomeDetailsScreen: React.FC = () => {
             </View>
           </View>
         </Modal>
-      </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -1127,11 +1148,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 8,
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 }, // Higher height for a subtle downward shadow
-    shadowOpacity: 0.5, // Lower opacity for a softer shadow
-    shadowRadius: 4, // Adjust radius for softer shadow edges
-    elevation: 10, // Adjust elevation to match the shadow effect across platforms
   },
   calculatedInput: {
     backgroundColor: '#94bcb4',
@@ -1142,11 +1158,6 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     minWidth: 50,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 }, // Higher height for a subtle downward shadow
-    shadowOpacity: 0.5, // Lower opacity for a softer shadow
-    shadowRadius: 4, // Adjust radius for softer shadow edges
-    elevation: 10, // Adjust elevation to match the shadow effect across platforms
   },
   modalOverlay2: {
     flex: 1,

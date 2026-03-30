@@ -284,7 +284,10 @@ const SegmentScreen = () => {
         style={[
           styles.segmentButtonText,
           selectedSegmentId === item.id && styles.segmentButtonTextActive,
-        ]}>
+        ]}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.7}>
         {item.title}
       </Text>
     </TouchableOpacity>
@@ -438,7 +441,7 @@ const styles = StyleSheet.create({
   },
   segmentButton: {
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     marginHorizontal: 3,
     borderRadius: 10,
     backgroundColor: '#f0f0f0',
@@ -447,7 +450,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#1d756d',
     height: 40,
-    width: 100,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,

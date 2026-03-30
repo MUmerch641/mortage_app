@@ -919,14 +919,19 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
           <Box
             style={{
               justifyContent: 'center',
-              width: '62%',
-              padding: 10,
+              alignSelf: 'flex-start',
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: '700', color: '#ffff' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: '700', color: '#ffff' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Maximum Eligibility
             </Text>
           </Box>
@@ -974,15 +979,20 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
           <Box
             style={{
               justifyContent: 'center',
-              width: '62%',
-              top: 7,
-              padding: 10,
+              alignSelf: 'flex-start',
+              marginTop: 7,
+              paddingHorizontal: 20,
+              paddingVertical: 8,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: '700', color: '#ffff' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: '700', color: '#ffff' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Loan to value (LTV)
             </Text>
           </Box>
@@ -1043,15 +1053,20 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
           <Box
             style={{
               justifyContent: 'center',
-              width: 220,
-              padding: 15,
+              alignSelf: 'flex-start',
+              paddingHorizontal: 20,
+              paddingVertical: 12,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 55,
+              minHeight: 45,
               marginTop: 20,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: '700', color: '#ffff' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: '700', color: '#ffff' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Customer Request:
             </Text>
           </Box>
@@ -1269,15 +1284,20 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
           <Box
             style={{
               justifyContent: 'center',
-              width: 160,
-              padding: 13,
+              alignSelf: 'flex-start',
+              paddingHorizontal: 20,
+              paddingVertical: 10,
               backgroundColor: '#1d756d',
               borderRadius: 10,
               alignItems: 'center',
-              height: 50,
+              minHeight: 40,
               marginTop: 20,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: '700', color: '#ffff' }}>
+            <Text
+              style={{ fontSize: 16, fontWeight: '700', color: '#ffff' }}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}>
               Installments
             </Text>
           </Box>

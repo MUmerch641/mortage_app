@@ -19,6 +19,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Pdf from 'react-native-pdf';
 import { useDispatch, useSelector } from 'react-redux';
 import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
 import { layout5Form } from '../redux/slices/layout5Slice';
 import { generateAmortizationSchedule } from '../utils/ammortizationTable';
 import { formatValue } from '../utils/helpers';
@@ -428,6 +429,26 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
     }
   };
 
+  const sharePDF = async () => {
+    if (!pdfPath) {
+      Alert.alert('Error', 'PDF not available to share.');
+      return;
+    }
+    try {
+      const shareOptions = {
+        title: 'Mortgage Eligibility',
+        url: `file://${pdfPath}`,
+        type: 'application/pdf',
+      };
+      await Share.open(shareOptions);
+    } catch (error: any) {
+      // User cancelling the share sheet throws an error we can safely ignore
+      if (error && error.message !== 'User did not share') {
+        console.error('Error sharing PDF:', error);
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
@@ -600,16 +621,21 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
 
           {/* Download Button */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.pdfButtons} onPress={downloadPDF}>
-              <Text style={styles.buttonText}>Download PDF</Text>
-            </TouchableOpacity>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.pdfButtonsScroll}>
+              <TouchableOpacity style={styles.pdfButtons} onPress={sharePDF}>
+                <Text style={styles.buttonText}>Share PDF</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={[styles.pdfButtons, { marginLeft: 10 }]} onPress={downloadPDF}>
+                <Text style={styles.buttonText}>Download</Text>
+              </TouchableOpacity>
 
-            {/* Close Button */}
-            <TouchableOpacity
-              style={styles.pdfButtons}
-              onPress={() => setModalVisible(false)}>
-              <Text style={styles.buttonText}>Close</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.pdfButtons, { marginLeft: 10 }]}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.buttonText}>Close</Text>
+              </TouchableOpacity>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -655,19 +681,21 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 0,
     left: 0,
     right: 0,
-    alignItems: 'center', // Vertically center buttons
-    paddingHorizontal: 20,
-    justifyContent: 'space-between',
-    // backgroundColor: 'rgba(255, 255, 255, 0.9)', // Semi-transparent
-    // zIndex: 10, // Ensures buttons stay above PDF
+    height: 70,
+    justifyContent: 'center',
+    paddingHorizontal: 0,
+  },
+  pdfButtonsScroll: {
+    paddingHorizontal: 15,
+    alignItems: 'center',
   },
   pdfButtons: {
     backgroundColor: '#1d756d',
     padding: 10,
-    marginBottom: 10,
+    paddingHorizontal: 20,
     borderRadius: 6,
   },
   inputFocused: {

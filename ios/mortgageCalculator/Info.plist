@@ -60,6 +60,7 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to the camera to allow users to take photos for profile pictures and other app functionality.</string>
-
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to the photo library to allow users to select profile pictures or upload documents.</string>
 </dict>
 </plist>

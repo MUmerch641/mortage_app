@@ -224,12 +224,17 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
               style={{
                 justifyContent: 'center',
                 paddingHorizontal: 20,
-                paddingVertical: 10,
+                paddingVertical: 8,
                 backgroundColor: '#1d756d',
                 borderRadius: 10,
                 alignItems: 'center',
+                minHeight: 40,
               }}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+              <Text
+                style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.7}>
                 Rates
               </Text>
             </Box>
