@@ -95,7 +95,7 @@ const TextFieldInput = ({
           }}
           placeholder={simpleInput ? placeHolder : ''}
           value={externalValue !== undefined ? externalValue : txt}
-          placeholderTextColor={placeholderColor || colors.bg_subtle}
+          placeholderTextColor={placeholderColor || "#999"}
           editable={!isDisabled}
           selectTextOnFocus={!isDisabled}
           onFocus={() => setIsFocused(true)}

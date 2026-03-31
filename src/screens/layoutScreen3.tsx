@@ -161,8 +161,10 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
   };
 
   const handleFocus = (
-    event: NativeSyntheticEvent<TextInputFocusEventData>,
-    ref: React.RefObject<TextInput | null>,
+    event: NativeSyntheticEvent<TextInputFocusEventData placeholderTextColor="#999"
+        >,
+    ref: React.RefObject<TextInput | null placeholderTextColor="#999"
+        >,
     field: string,
   ) => {
     setFocusedField(field);
@@ -259,7 +261,8 @@ const LayoutScreen3: React.FC<MainScreenProps> = ({
             <View key={item.field}>
               <Text style={styles.label}>{item.label}</Text>
               <TextInput
-                ref={el => {
+                ref={el = placeholderTextColor="#999"
+        > {
                   inputRefs.current[index] = el;
                 }}
                 style={styles.input}

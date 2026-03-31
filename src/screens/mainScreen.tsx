@@ -47,13 +47,19 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
     bufferPeriod: allValuesFromLayout1?.bufferPeriod || 0,
   });
 
-  const dbrRef = useRef<TextInput | null>(null);
-  const dobRef = useRef<TextInput | null>(null);
+  const dbrRef = useRef<TextInput | null placeholderTextColor="#999"
+        >(null);
+  const dobRef = useRef<TextInput | null placeholderTextColor="#999"
+        >(null);
   const scrollViewRef = useRef<ScrollView>(null);
-  const incomeRef = useRef<TextInput | null>(null);
-  const bufferPeriodRef = useRef<TextInput | null>(null);
-  const ageAtMaturityRef = useRef<TextInput | null>(null);
-  const additionalIncomeRef = useRef<TextInput | null>(null);
+  const incomeRef = useRef<TextInput | null placeholderTextColor="#999"
+        >(null);
+  const bufferPeriodRef = useRef<TextInput | null placeholderTextColor="#999"
+        >(null);
+  const ageAtMaturityRef = useRef<TextInput | null placeholderTextColor="#999"
+        >(null);
+  const additionalIncomeRef = useRef<TextInput | null placeholderTextColor="#999"
+        >(null);
 
   const handleInputChange = (field: keyof IncomeFormState, value: string) => {
     let sanitizedValue = value.trim();
@@ -137,9 +143,12 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigateToTab, currentTab, tota
   // No manual scrolling needed – automaticallyAdjustKeyboardInsets on the
   // ScrollView handles bringing the focused input above the keyboard automatically.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleFocus = (_event: NativeSyntheticEvent<TextInputFocusEventData>, _ref: React.RefObject<TextInput | null>) => { };
+  const handleFocus = (_event: NativeSyntheticEvent<TextInputFocusEventData placeholderTextColor="#999"
+        >, _ref: React.RefObject<TextInput | null placeholderTextColor="#999"
+        >) => { };
 
-  const moveToNextField = (nextField: React.RefObject<TextInput | null>) => {
+  const moveToNextField = (nextField: React.RefObject<TextInput | null placeholderTextColor="#999"
+        >) => {
     if (nextField?.current) {
       nextField.current.focus();
     }

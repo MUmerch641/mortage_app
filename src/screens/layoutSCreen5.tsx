@@ -55,11 +55,16 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
   const { financeAmount, propertyValue, totalTenureMonth } =
     allValuesFromLayout4 || {};
 
-  const nameRef = useRef<TextInput>(null);
-  const mobileRef = useRef<TextInput>(null);
-  const emailRef = useRef<TextInput>(null);
-  const companyRef = useRef<TextInput>(null);
-  const remarksRef = useRef<TextInput>(null);
+  const nameRef = useRef<TextInput placeholderTextColor="#999"
+        >(null);
+  const mobileRef = useRef<TextInput placeholderTextColor="#999"
+        >(null);
+  const emailRef = useRef<TextInput placeholderTextColor="#999"
+        >(null);
+  const companyRef = useRef<TextInput placeholderTextColor="#999"
+        >(null);
+  const remarksRef = useRef<TextInput placeholderTextColor="#999"
+        >(null);
   const scrollViewRef = useRef<ScrollView>(null);
 
   const [isChecked, setIsChecked] = useState(
@@ -236,8 +241,10 @@ const LayoutScreen5: React.FC<MainScreenProps> = ({
   }, [allValuesFromLayout5]);
 
   const handleFocus = (
-    event: NativeSyntheticEvent<TextInputFocusEventData>,
-    ref: React.RefObject<TextInput | null>,
+    event: NativeSyntheticEvent<TextInputFocusEventData placeholderTextColor="#999"
+        >,
+    ref: React.RefObject<TextInput | null placeholderTextColor="#999"
+        >,
     field: string,
   ) => {
     setFocusedInput(field);

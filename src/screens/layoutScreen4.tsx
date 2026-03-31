@@ -265,10 +265,14 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
 
   const scrollViewRef = useRef<ScrollView>(null);
   const inputRefs = {
-    LTV: useRef<TextInput>(null),
-    totalTenureMonth: useRef<TextInput>(null),
-    financeAmount: useRef<TextInput>(null),
-    propertyValue: useRef<TextInput>(null),
+    LTV: useRef<TextInput placeholderTextColor="#999"
+        >(null),
+    totalTenureMonth: useRef<TextInput placeholderTextColor="#999"
+        >(null),
+    financeAmount: useRef<TextInput placeholderTextColor="#999"
+        >(null),
+    propertyValue: useRef<TextInput placeholderTextColor="#999"
+        >(null),
   };
 
   const toggleConversion = useCallback(() => {
@@ -546,8 +550,10 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
 
   const handleFocus = useCallback(
     (
-      event: NativeSyntheticEvent<TextInputFocusEventData>,
-      ref: React.RefObject<TextInput | null>,
+      event: NativeSyntheticEvent<TextInputFocusEventData placeholderTextColor="#999"
+        >,
+      ref: React.RefObject<TextInput | null placeholderTextColor="#999"
+        >,
       field: string,
     ) => {
       setFocusedInput(field);
