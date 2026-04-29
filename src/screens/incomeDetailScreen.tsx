@@ -89,64 +89,28 @@ const IncomeDetailsScreen: React.FC = () => {
 
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const yearlyIncomeRef = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const returnInvestmentRef = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const capLimitRef = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
+  const yearlyIncomeRef = useRef<TextInput>(null);
+  const returnInvestmentRef = useRef<TextInput>(null);
+  const capLimitRef = useRef<TextInput>(null);
 
-  const input1Ref = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input2Ref = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input3Ref = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const percentageAvgRef = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
+  const input1Ref = useRef<TextInput>(null);
+  const input2Ref = useRef<TextInput>(null);
+  const input3Ref = useRef<TextInput>(null);
+  const percentageAvgRef = useRef<TextInput>(null);
 
-  const input1RefInc = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input2RefInc = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input3RefInc = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input4RefInc = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input5RefInc = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input6RefInc = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const percentageAvgRefInc = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
+  const input1RefInc = useRef<TextInput>(null);
+  const input2RefInc = useRef<TextInput>(null);
+  const input3RefInc = useRef<TextInput>(null);
+  const input4RefInc = useRef<TextInput>(null);
+  const input5RefInc = useRef<TextInput>(null);
+  const input6RefInc = useRef<TextInput>(null);
+  const percentageAvgRefInc = useRef<TextInput>(null);
 
-  const input1RefSA = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input2RefSA = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
+  const input1RefSA = useRef<TextInput>(null);
+  const input2RefSA = useRef<TextInput>(null);
 
-  const input1RefTA = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
-  const input2RefTA = useRef<TextInput placeholderTextColor="#999"
-         placeholder="0"
-        >(null);
+  const input1RefTA = useRef<TextInput>(null);
+  const input2RefTA = useRef<TextInput>(null);
 
   // Load saved data from Redux when component mounts
   useEffect(() => {
@@ -258,12 +222,8 @@ const IncomeDetailsScreen: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleFocus = (
-    event: NativeSyntheticEvent<TextInputFocusEventData placeholderTextColor="#999"
-         placeholder="0"
-        >,
-    ref: React.RefObject<TextInput | null placeholderTextColor="#999"
-         placeholder="0"
-        >,
+    event: NativeSyntheticEvent<TextInputFocusEventData>,
+    ref: React.RefObject<TextInput | null>,
   ) => { };
 
   const calculateAndUpdate = useCallback(
@@ -369,9 +329,7 @@ const IncomeDetailsScreen: React.FC = () => {
     [allValuesFromLayout1?.income, dispatch],
   );
 
-  const moveToNextField = (nextField: React.RefObject<TextInput | null placeholderTextColor="#999"
-         placeholder="0"
-        >) => {
+  const moveToNextField = (nextField: React.RefObject<TextInput | null>) => {
     if (nextField?.current) {
       nextField.current.focus();
     }
@@ -417,9 +375,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.rental.yearlyIncome.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, yearlyIncomeRef)}
+          onFocus={e => handleFocus(e, yearlyIncomeRef)}
           onChangeText={text =>
             handleInputChange('rental', 'yearlyIncome', text)
           }
@@ -445,9 +401,7 @@ const IncomeDetailsScreen: React.FC = () => {
                 ? `${formState.rental.returnInvestment}%`
                 : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > {
+          onFocus={e => {
             handleFocus(e, returnInvestmentRef);
             setIsReturnInvestmentFocused(true);
           }}
@@ -477,9 +431,7 @@ const IncomeDetailsScreen: React.FC = () => {
                 ? `${formState.rental.capLimit}%`
                 : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > {
+          onFocus={e => {
             handleFocus(e, capLimitRef);
             setIsCapLimitFocused(true);
           }}
@@ -547,9 +499,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.bonus.input1.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input1Ref)}
+          onFocus={e => handleFocus(e, input1Ref)}
           onChangeText={text => handleInputChange('bonus', 'input1', text)}
           onBlur={() =>
             handleBlur('bonus', 'input1', formState.bonus.input1.toString())
@@ -567,9 +517,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.bonus.input2.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input2Ref)}
+          onFocus={e => handleFocus(e, input2Ref)}
           onChangeText={text => handleInputChange('bonus', 'input2', text)}
           onBlur={() =>
             handleBlur('bonus', 'input2', formState.bonus.input2.toString())
@@ -587,9 +535,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.bonus.input3.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input3Ref)}
+          onFocus={e => handleFocus(e, input3Ref)}
           onChangeText={text => handleInputChange('bonus', 'input3', text)}
           onBlur={() =>
             handleBlur('bonus', 'input3', formState.bonus.input3.toString())
@@ -615,9 +561,7 @@ const IncomeDetailsScreen: React.FC = () => {
                 ? `${formState.bonus.percentageAvg}%`
                 : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > {
+          onFocus={e => {
             handleFocus(e, percentageAvgRef);
             setIsPercentageAvgFocused(true);
           }}
@@ -685,9 +629,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.incentive.input1.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input1RefInc)}
+          onFocus={e => handleFocus(e, input1RefInc)}
           onChangeText={text => handleInputChange('incentive', 'input1', text)}
           onBlur={() =>
             handleBlur(
@@ -710,9 +652,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.incentive.input2.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input2RefInc)}
+          onFocus={e => handleFocus(e, input2RefInc)}
           onChangeText={text => handleInputChange('incentive', 'input2', text)}
           onBlur={() =>
             handleBlur(
@@ -734,9 +674,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.incentive.input3.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input3RefInc)}
+          onFocus={e => handleFocus(e, input3RefInc)}
           onChangeText={text => handleInputChange('incentive', 'input3', text)}
           onBlur={() =>
             handleBlur(
@@ -758,9 +696,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.incentive.input4.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input4RefInc)}
+          onFocus={e => handleFocus(e, input4RefInc)}
           onChangeText={text => handleInputChange('incentive', 'input4', text)}
           onBlur={() =>
             handleBlur(
@@ -782,9 +718,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.incentive.input5.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input5RefInc)}
+          onFocus={e => handleFocus(e, input5RefInc)}
           onChangeText={text => handleInputChange('incentive', 'input5', text)}
           onBlur={() =>
             handleBlur(
@@ -806,9 +740,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.incentive.input6.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input6RefInc)}
+          onFocus={e => handleFocus(e, input6RefInc)}
           onChangeText={text => handleInputChange('incentive', 'input6', text)}
           onBlur={() =>
             handleBlur(
@@ -838,9 +770,7 @@ const IncomeDetailsScreen: React.FC = () => {
                 ? `${formState.incentive.percentageAvg}%`
                 : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > {
+          onFocus={e => {
             handleFocus(e, percentageAvgRefInc);
             setIsPercentageAvgIncFocused(true);
           }}
@@ -908,9 +838,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.schoolingAllowance.yearlyAllowance.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input1RefSA)}
+          onFocus={e => handleFocus(e, input1RefSA)}
           onChangeText={text =>
             handleInputChange('schoolingAllowance', 'yearlyAllowance', text)
           }
@@ -937,9 +865,7 @@ const IncomeDetailsScreen: React.FC = () => {
                 ? `${formState.schoolingAllowance.percentageConsidered}%`
                 : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > {
+          onFocus={e => {
             handleFocus(e, input2RefSA);
             setIsPercentageConsideredFocused(true);
           }}
@@ -1012,9 +938,7 @@ const IncomeDetailsScreen: React.FC = () => {
               ? formState.ticketAllowance.yearlyAllowance.toLocaleString()
               : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > handleFocus(e, input1RefTA)}
+          onFocus={e => handleFocus(e, input1RefTA)}
           onChangeText={text =>
             handleInputChange('ticketAllowance', 'yearlyAllowance', text)
           }
@@ -1041,9 +965,7 @@ const IncomeDetailsScreen: React.FC = () => {
                 ? `${formState.ticketAllowance.percentageConsidered}%`
                 : ''
           }
-          onFocus={e = placeholderTextColor="#999"
-         placeholder="0"
-        > {
+          onFocus={e => {
             handleFocus(e, input2RefTA);
             setIsTicketPercentageFocused(true);
           }}

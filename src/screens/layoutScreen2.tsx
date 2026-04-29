@@ -173,10 +173,8 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
   };
 
   const handleFocus = (
-    event: NativeSyntheticEvent<TextInputFocusEventData placeholderTextColor="#999"
-        >,
-    ref: React.RefObject<TextInput | null placeholderTextColor="#999"
-        >,
+    event: NativeSyntheticEvent<TextInputFocusEventData>,
+    ref: React.RefObject<TextInput | null>,
     field: string,
   ) => {
     setFocusedField(field);
@@ -250,8 +248,7 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
                   Monthly Installment #{index + 1}
                 </Text>
                 <TextInput
-                  ref={el = placeholderTextColor="#999"
-        > {
+                  ref={el => {
                     inputRefs.current[index] = el;
                   }}
                   style={styles.input}
@@ -329,8 +326,7 @@ const LayoutScreen2: React.FC<MainScreenProps> = ({
                     : `Credit Card Limit #${index}`}
                 </Text>
                 <TextInput
-                  ref={el = placeholderTextColor="#999"
-        > {
+                  ref={el => {
                     inputRefs.current[index + 6] = el;
                   }}
                   style={styles.input}

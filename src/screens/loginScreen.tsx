@@ -105,6 +105,10 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
     try {
       setLoading(true);
       await GoogleSignin.hasPlayServices();
+      // Sign out from Google SDK first to clear any cached account,
+      // so the account picker is always shown instead of auto-selecting
+      // the previously used account.
+      await GoogleSignin.signOut();
       const response = await GoogleSignin.signIn();
 
       if (isSuccessResponse(response)) {

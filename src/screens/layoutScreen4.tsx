@@ -265,13 +265,13 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
 
   const scrollViewRef = useRef<ScrollView>(null);
   const inputRefs = {
-    LTV: useRef<TextInput placeholderTextColor="#999"
+    LTV: useRef<TextInput 
         >(null),
-    totalTenureMonth: useRef<TextInput placeholderTextColor="#999"
+    totalTenureMonth: useRef<TextInput 
         >(null),
-    financeAmount: useRef<TextInput placeholderTextColor="#999"
+    financeAmount: useRef<TextInput 
         >(null),
-    propertyValue: useRef<TextInput placeholderTextColor="#999"
+    propertyValue: useRef<TextInput 
         >(null),
   };
 
@@ -550,10 +550,8 @@ const LayoutScreen4: React.FC<MainScreenProps> = ({
 
   const handleFocus = useCallback(
     (
-      event: NativeSyntheticEvent<TextInputFocusEventData placeholderTextColor="#999"
-        >,
-      ref: React.RefObject<TextInput | null placeholderTextColor="#999"
-        >,
+      event: NativeSyntheticEvent<TextInputFocusEventData>,
+      ref: React.RefObject<TextInput | null>,
       field: string,
     ) => {
       setFocusedInput(field);

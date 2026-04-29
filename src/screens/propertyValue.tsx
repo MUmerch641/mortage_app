@@ -54,9 +54,9 @@ const PropertyValue: React.FC<PropertyValueProps> = ({ route }) => {
 
   const scrollViewRef = useRef<ScrollView>(null);
   const inputRefs = {
-    propertyValue: useRef<TextInput placeholderTextColor="#999"
+    propertyValue: useRef<TextInput 
         >(null),
-    propertyValueAddedPercent: useRef<TextInput placeholderTextColor="#999"
+    propertyValueAddedPercent: useRef<TextInput 
         >(null),
   };
 
@@ -204,8 +204,7 @@ const PropertyValue: React.FC<PropertyValueProps> = ({ route }) => {
             ref={inputRefs.propertyValue}
             keyboardType="decimal-pad"
             value={formatDisplayValue('propertyValue', form.propertyValue)}
-            onFocus={() = placeholderTextColor="#999"
-        > handleFocus('propertyValue')}
+            onFocus={() => handleFocus('propertyValue')}
             onBlur={() => handleBlur('propertyValue', form.propertyValue.toString())}
             onChangeText={text => handleChange('propertyValue', text)}
             returnKeyType="next"
@@ -227,8 +226,7 @@ const PropertyValue: React.FC<PropertyValueProps> = ({ route }) => {
             ref={inputRefs.propertyValueAddedPercent}
             keyboardType="decimal-pad"
             value={formatDisplayValue('propertyValueAddedPercent', form.propertyValueAddedPercent)}
-            onFocus={() = placeholderTextColor="#999"
-        > handleFocus('propertyValueAddedPercent')}
+            onFocus={() => handleFocus('propertyValueAddedPercent')}
             onBlur={() => handleBlur('propertyValueAddedPercent', form.propertyValueAddedPercent.toString())}
             onChangeText={text =>
               handleChange('propertyValueAddedPercent', text)
