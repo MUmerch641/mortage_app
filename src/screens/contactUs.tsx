@@ -90,7 +90,7 @@ const ContactUs: React.FC = () => {
       }).catch(() => { }); // Don't block if Firestore fails
 
       // Open email client to send actual email to client
-      const subject = encodeURIComponent('Mortgage Calculator - Contact Us');
+      const subject = encodeURIComponent('Mortgage Eligibility - Contact Us');
       // Format the body so it looks clean in the email client
       const body = encodeURIComponent(
         `Name: ${name.trim()}\nEmail: ${email.trim()}\nMobile: ${mobile.trim() || 'N/A'}\n\nMessage:\n${message.trim()}`

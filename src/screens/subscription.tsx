@@ -238,7 +238,7 @@ const Subscription: React.FC<any> = ({ route }) => {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={styles.mainHeading}>Mortgage Calculator Pro</Text>
+            <Text style={styles.mainHeading}>Mortgage Eligibility Pro</Text>
             <Text style={styles.subHeading}>
               Unlock the full potential of your mortgage planning.
             </Text>
