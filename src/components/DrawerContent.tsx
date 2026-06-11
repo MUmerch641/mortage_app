@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   BackHandler,
+  Linking,
 } from 'react-native';
 import { DrawerContentScrollView, DrawerItem, useDrawerStatus } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -105,6 +106,18 @@ const DrawerContent = (props: any) => {
           labelStyle={currentRoute === 'instructions' ? styles.drawerItemLabel : styles.drawerItemLabel2}
           style={currentRoute === 'instructions' ? styles.homeDrawerItem : {}}
 
+        />
+
+        <DrawerItem
+          label="Privacy Policy"
+          onPress={() => Linking.openURL('https://mortgage-calculator-policy.vercel.app/privacy-policy')}
+          labelStyle={styles.drawerItemLabel2}
+        />
+
+        <DrawerItem
+          label="Delete Account"
+          onPress={() => Linking.openURL('https://mortgage-calculator-policy.vercel.app/delete-account')}
+          labelStyle={styles.drawerItemLabel2}
         />
       </View>
 
